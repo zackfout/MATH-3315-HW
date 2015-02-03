@@ -1,0 +1,308 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>MATH 3315 Project 1 - Taylor Series - By Zack Fout</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-02-03"><meta name="DC.source" content="proj1.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1><b>MATH 3315 Project 1 - Taylor Series - By Zack Fout</b></h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Part 1. The Horner Scheme</a></li><li><a href="#4">Part 2. Applying the Horner Scheme to the Exponential Function</a></li><li><a href="#6">Part 3. Cancellation Errors in the Taylor Approximation</a></li><li><a href="#8">Part 4. Cancellation Errors in the Taylor Approximation Continued</a></li></ul></div><h2>Part 1. The Horner Scheme<a name="1"></a></h2><p>The Horner Scheme is an algorithm for calculating polynomials of the form:</p><p><img src="proj1_eq57968.png" alt="$$p(x) = \sum_{i=0}^{n}{a_{i}x^{i}}$$"></p><p>by transforming the monomial form of p(x) into a computationally efficient form.</p><div><ul><li><b>Evaluating polynomials</b></li></ul></div><p>Given the polynomial</p><p><img src="proj1_eq64666.png" alt="$$y = (1 - x)^{4}$">,</p><p>which is equivalent to the polynomial</p><p><img src="proj1_eq55438.png" alt="$$y = x^{4} - 4x^{3} + 6x^{2} - 4x + 1$"></p><p>and therefore of the form</p><p><img src="proj1_eq76033.png" alt="$$p(x) = a_{n}x^{n} + a_{n - 1}x^{n - 1} + a_{n - 2}x^{n - 2} + ... + a_{2}x^{2} + a_{1}x + a_{0}$">,</p><p>it may be transformed into the equivalent expression</p><p><img src="proj1_eq05401.png" alt="$$p(x) = (...((a_{n}x + a_{n - 1})x + a_{n - 2})x + ...)x + a_{2})x + a_{1})x +a_{0}$"></p><p>by means of the Horner Scheme. This method may be easily implemented using an iterative approach. Consider the following MATLAB&reg; code:</p><pre class="language-matlab"><span class="keyword">function</span> p=horner(x,a)
+    n = length(a);
+    p = a(1); <span class="comment">% set p to the first element of a</span>
+    <span class="keyword">for</span> j=2:n <span class="comment">% iterate over the remaining elements of a</span>
+        p = p*x + a(j); <span class="comment">% store the next part of the scheme in p</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><p>where x is the input for p(x) and a is an array of the coefficents of the Horner Scheme representation of p(x). This function will produce the correct outputs for the polynomial <img src="proj1_eq64666.png" alt="$$y = (1 - x)^{4}$">, a few of which are shown here:</p><pre class="codeinput">a = [1, -4, 6, -4, 1];
+<span class="keyword">for</span> j = -2 : 4
+    p = horner(j, a); <span class="comment">% compute Horner scheme representation</span>
+    fprintf(<span class="string">'The function value for x = %g is %g.\n'</span>, j, p);
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">The function value for x = -2 is 81.
+The function value for x = -1 is 16.
+The function value for x = 0 is 1.
+The function value for x = 1 is 0.
+The function value for x = 2 is 1.
+The function value for x = 3 is 16.
+The function value for x = 4 is 81.
+</pre><p>These output values are congruent with the computed values found using traditional methods.</p><div><ul><li><b>Graph of</b> <img src="proj1_eq64666.png" alt="$$y = (1 - x)^{4}$"></li></ul></div><pre class="codeinput">x = linspace(-1, 1, 1000);
+<span class="keyword">for</span> i = 1 : 1000
+    y(i) = horner(x(i), a); <span class="comment">% compute Horner scheme representation</span>
+<span class="keyword">end</span>
+semilogy(x, y, <span class="string">'m'</span>);
+str = <span class="string">'$$y = (1 - x)^{4}$$'</span>; <span class="comment">% latex equation for y = (1 - x)^4</span>
+text(-0.2, 0.01, str, <span class="string">'FontSize'</span>, 20, <span class="string">'Interpreter'</span>, <span class="string">'latex'</span>); <span class="comment">% formatting</span>
+title(<span class="string">'The Graph of y = (1 - x)^4'</span>);
+xlabel(<span class="string">'Independent Variable x'</span>);
+ylabel(<span class="string">'Dependent Variable y'</span>);
+</pre><img vspace="5" hspace="5" src="proj1_01.png" alt=""> <p>This plot shows that as x approaches 1, the limit of <img src="proj1_eq64666.png" alt="$$y = (1 - x)^{4}$"> converges to zero.</p><h2>Part 2. Applying the Horner Scheme to the Exponential Function<a name="4"></a></h2><p>In order to apply Horner's method to the exponential function <img src="proj1_eq57703.png" alt="$$e^{x}$">, it must first be converted into a polynomial. The Taylor approximation of a function centered at <i>a</i>,</p><p><img src="proj1_eq78751.png" alt="$$\sum_{n = 0}^{\infty}\frac{f^{(n)}(a)}{n!}(x - a)^{n}$">,</p><p>is convenient for representing functions as a sum of terms. If the Taylor expansion is centered at 0, then it is a special case of the Taylor series called a Mclaurin series. The nth partial sum of the Mclaurin expansion of <img src="proj1_eq57703.png" alt="$$e^{x}$"> is</p><p><img src="proj1_eq52044.png" alt="$$e^{x} = \sum_{k = 0}^{n}\frac{x^{k}}{k!} = \frac{x^{n}}{n!} + \frac{x^{(n - 1)}}{(n - 1)!} + \frac{x^{(n - 2)}}{(n - 2)!} + ... + \frac{x^{2}}{2!} + x + 1$">.</p><p>By computing the (n - 1)st coefficients of the Mclaurin expansion of <img src="proj1_eq57703.png" alt="$$e^{x}$">, the horner function described in Part 1 may be used to approximate the value of the exponential function at a given x value. Consider the following MATLAB&reg; code:</p><pre class="language-matlab"><span class="keyword">function</span> a=getTaylorCoeff(n)
+    <span class="keyword">for</span> k = 1 : n <span class="comment">% loop from 1 to n</span>
+        a(k) = 1.0/factorial(n - k) <span class="comment">% compute the coefficient at k</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><p>where n is the number of terms to be computed. This method will produce correct approximations for  <img src="proj1_eq58145.png" alt="$$e^{13.8}$">, a few of which are shown here:</p><pre class="codeinput">fprintf(<span class="string">'exp(13.8) is equal to: %g.\n'</span>, exp(13.8));
+<span class="keyword">for</span> i = 10 : 10 : 40
+    b = getTaylorCoeff(i); <span class="comment">% determine Taylor expansion coefficients</span>
+    q = horner(13.8, b); <span class="comment">% compute Horner scheme representation</span>
+    rel_err1 = abs(q - exp(13.8)) / exp(13.8); <span class="comment">% compute relative error</span>
+    fprintf(<span class="string">'The approximation for exp(13.8) with %g terms is %g, '</span>, i, q);
+    fprintf(<span class="string">'and the relative error on exp(13.8) with %g terms is %e.\n'</span>, i, rel_err1);
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">exp(13.8) is equal to: 984609.
+The approximation for exp(13.8) with 10 terms is 117377, and the relative error on exp(13.8) with 10 terms is 8.807885e-01.
+The approximation for exp(13.8) with 20 terms is 917041, and the relative error on exp(13.8) with 20 terms is 6.862452e-02.
+The approximation for exp(13.8) with 30 terms is 984504, and the relative error on exp(13.8) with 30 terms is 1.065561e-04.
+The approximation for exp(13.8) with 40 terms is 984609, and the relative error on exp(13.8) with 40 terms is 7.344424e-09.
+</pre><p>It can be seen that while the relative error on <img src="proj1_eq57703.png" alt="$$e^{x}$"> is very small with 40 terms in the Taylor approximation, it is nonzero and therefore it cannot be said that the Taylor series converges to the exact value of <img src="proj1_eq57703.png" alt="$$e^{x}$">. Interestingly, both the 40 term approximation and the real value of <img src="proj1_eq57703.png" alt="$$e^{x}$"> appear to be equivalent, yet the relative error is nonzero. This is due to loss of significance on the floating point calculation, which will be explored further in the following parts.</p><h2>Part 3. Cancellation Errors in the Taylor Approximation<a name="6"></a></h2><p>The approach used in Part 2 will be used here to approximate <img src="proj1_eq32410.png" alt="$$e^{-13.8}$">. By modifying the above code, the following output is produced:</p><pre class="codeinput">fprintf(<span class="string">'exp(-13.8) is equal to: %e.\n'</span>, exp(-13.8));
+<span class="keyword">for</span> i = 10 : 10 : 40
+    c = getTaylorCoeff(i); <span class="comment">% determine Taylor expansion coefficients</span>
+    r = horner(-13.8, c); <span class="comment">% compute Horner scheme representation</span>
+    rel_err2 = abs(r - exp(-13.8)) / exp(-13.8); <span class="comment">% compute relative error</span>
+    fprintf(<span class="string">'The approximation for exp(-13.8) with %g terms is %e, '</span>, i, r);
+    fprintf(<span class="string">'and the relative error on exp(-13.8) with %g terms is %e.\n'</span>, i, rel_err2);
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">exp(-13.8) is equal to: 1.015631e-06.
+The approximation for exp(-13.8) with 10 terms is -2.973231e+04, and the relative error on exp(-13.8) with 10 terms is 2.927471e+10.
+The approximation for exp(-13.8) with 20 terms is -1.544602e+04, and the relative error on exp(-13.8) with 20 terms is 1.520830e+10.
+The approximation for exp(-13.8) with 30 terms is -4.087592e+01, and the relative error on exp(-13.8) with 30 terms is 4.024680e+07.
+The approximation for exp(-13.8) with 40 terms is -3.603547e-03, and the relative error on exp(-13.8) with 40 terms is 3.549085e+03.
+</pre><p>Here, the calculated relative error is much larger than the absolute error for exp(-13.8) and  the relative error found for <img src="proj1_eq58145.png" alt="$$e^{13.8}$">. While the approach used in Part 2 ought to work for this case, it fails because the approximated value of <img src="proj1_eq32410.png" alt="$$e^{-13.8}$"> is very close to the value computed by exp(-13.8) and the subtraction used to calculate the relative error produces a cancellation error because the result is a number that is too small to be stored as a floating point number. This results in a reduction of the accuracy of the subtraction operation, and produces the larger than expected value for the relative error. Therefore, it may be said that the convergence of the Taylor approximation to the exact value of exp(-13.8) is extremely close but not equivalent.</p><h2>Part 4. Cancellation Errors in the Taylor Approximation Continued<a name="8"></a></h2><p>Now, the approach used in Part 2 will be used to approximate <img src="proj1_eq99492.png" alt="$$\frac{1}{e^{13.8}}$">. By modifying the code presented in Part 2 yet again, the following output is produced:</p><pre class="codeinput">fprintf(<span class="string">'1/exp(13.8) is equal to %e.\n'</span>, 1/exp(13.8));
+<span class="keyword">for</span> i = 10 : 10 : 40
+    d = getTaylorCoeff(i); <span class="comment">% determine Taylor expansion coefficients</span>
+    s = 1/horner(13.8, d); <span class="comment">% compute Horner scheme representation</span>
+    rel_err3 = abs(s - exp(-13.8)) / exp(-13.8);
+    fprintf(<span class="string">'The approximation for 1/exp(13.8) with %g terms is %e, '</span>, i, s);
+    fprintf(<span class="string">'and the relative error on 1/exp(13.8) with %g terms is %e.\n'</span>, i, rel_err3);
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">1/exp(13.8) is equal to 1.015631e-06.
+The approximation for 1/exp(13.8) with 10 terms is 8.519577e-06, and the relative error on 1/exp(13.8) with 10 terms is 7.388453e+00.
+The approximation for 1/exp(13.8) with 20 terms is 1.090464e-06, and the relative error on 1/exp(13.8) with 20 terms is 7.368083e-02.
+The approximation for 1/exp(13.8) with 30 terms is 1.015740e-06, and the relative error on 1/exp(13.8) with 30 terms is 1.065674e-04.
+The approximation for 1/exp(13.8) with 40 terms is 1.015631e-06, and the relative error on 1/exp(13.8) with 40 terms is 7.344424e-09.
+</pre><p>In this example, <img src="proj1_eq99492.png" alt="$$\frac{1}{e^{13.8}}$"> is formed by taking the reciprocal of the approximated values calculated in Part 2, rather than determining the value produced by the Horner Scheme with -13.8. This method produces accurate approximations of <img src="proj1_eq99492.png" alt="$$\frac{1}{e^{13.8}}$">, which is confirmed by the calculated relative errors, and avoids the cancellation errors produced in Part 3 because <img src="proj1_eq58145.png" alt="$$e^{13.8}$"> is not prone to limit errors caused by loss of accuracy in computing very large numbers, so taking its reciprocal does not reduce the accuracy of the final result. Therefore, the approximation for <img src="proj1_eq99492.png" alt="$$\frac{1}{e^{13.8}}$"> is accurate. These examples serve to illustrate the limitations of storing floating point numbers with machine precision and how these limitations may be avoided.</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% *MATH 3315 Project 1 - Taylor Series - By Zack Fout*
+%% Part 1. The Horner Scheme
+% The Horner Scheme is an algorithm for calculating polynomials of the
+% form:
+%
+% $$p(x) = \sum_{i=0}^{n}{a_{i}x^{i}}$$
+%
+% by transforming the monomial form of p(x) into a computationally
+% efficient form.
+%
+% * *Evaluating polynomials*
+%
+% Given the polynomial
+%
+% $$y = (1 - x)^{4}$,
+%
+% which is equivalent to the polynomial
+%
+% $$y = x^{4} - 4x^{3} + 6x^{2} - 4x + 1$
+% 
+% and therefore of the form
+%
+% $$p(x) = a_{n}x^{n} + a_{n - 1}x^{n - 1} + a_{n - 2}x^{n - 2} + ...
+% + a_{2}x^{2} + a_{1}x + a_{0}$,
+%
+% it may be transformed into the equivalent expression
+%
+% $$p(x) = (...((a_{n}x + a_{n - 1})x + a_{n - 2})x + ...)x + a_{2})x +
+% a_{1})x +a_{0}$
+%
+% by means of the Horner Scheme. This method may be easily implemented
+% using an iterative approach. Consider the following MATLAB(R) code:
+%
+%   function p=horner(x,a)
+%       n = length(a);
+%       p = a(1); % set p to the first element of a
+%       for j=2:n % iterate over the remaining elements of a
+%           p = p*x + a(j); % store the next part of the scheme in p
+%       end
+%   end
+%
+% where x is the input for p(x) and a is an array of the coefficents of
+% the Horner Scheme representation of p(x). This function will produce the
+% correct outputs for the polynomial $$y = (1 - x)^{4}$, a few of which are
+% shown here:
+a = [1, -4, 6, -4, 1];
+for j = -2 : 4
+    p = horner(j, a); % compute Horner scheme representation
+    fprintf('The function value for x = %g is %g.\n', j, p);
+end
+%%
+% These output values are congruent with the computed values found using
+% traditional methods.
+%
+% * *Graph of* $$y = (1 - x)^{4}$
+x = linspace(-1, 1, 1000);
+for i = 1 : 1000
+    y(i) = horner(x(i), a); % compute Horner scheme representation
+end
+semilogy(x, y, 'm');
+str = '$$y = (1 - x)^{4}$$'; % latex equation for y = (1 - x)^4
+text(-0.2, 0.01, str, 'FontSize', 20, 'Interpreter', 'latex'); % formatting
+title('The Graph of y = (1 - x)^4');
+xlabel('Independent Variable x');
+ylabel('Dependent Variable y');
+%%
+% This plot shows that as x approaches 1, the limit of $$y = (1 -
+% x)^{4}$ converges to zero.
+%% Part 2. Applying the Horner Scheme to the Exponential Function
+% In order to apply Horner's method to the exponential function $$e^{x}$,
+% it must first be converted into a polynomial. The Taylor approximation
+% of a function centered at _a_,
+%
+% $$\sum_{n = 0}^{\infty}\frac{f^{(n)}(a)}{n!}(x - a)^{n}$,
+%
+% is convenient for representing functions as a sum of terms. If the Taylor
+% expansion is centered at 0, then it is a special case of the Taylor
+% series called a Mclaurin series. The nth partial sum of the Mclaurin 
+% expansion of $$e^{x}$ is
+%
+% $$e^{x} = \sum_{k = 0}^{n}\frac{x^{k}}{k!} = \frac{x^{n}}{n!} +
+% \frac{x^{(n - 1)}}{(n - 1)!} + \frac{x^{(n - 2)}}{(n - 2)!} + ...
+% + \frac{x^{2}}{2!} + x + 1$.
+%
+% By computing the (n - 1)st coefficients of the Mclaurin expansion of
+% $$e^{x}$, the horner function described in Part 1 may be used to
+% approximate the value of the exponential function at a given x value.
+% Consider the following MATLAB(R) code:
+%
+%   function a=getTaylorCoeff(n)
+%       for k = 1 : n % loop from 1 to n
+%           a(k) = 1.0/factorial(n - k) % compute the coefficient at k
+%       end
+%   end
+%
+% where n is the number of terms to be computed. This method will produce
+% correct approximations for  $$e^{13.8}$, a few of which are shown here:
+fprintf('exp(13.8) is equal to: %g.\n', exp(13.8));
+for i = 10 : 10 : 40
+    b = getTaylorCoeff(i); % determine Taylor expansion coefficients
+    q = horner(13.8, b); % compute Horner scheme representation
+    rel_err1 = abs(q - exp(13.8)) / exp(13.8); % compute relative error
+    fprintf('The approximation for exp(13.8) with %g terms is %g, ', i, q);
+    fprintf('and the relative error on exp(13.8) with %g terms is %e.\n', i, rel_err1);
+end
+%%
+% It can be seen that while the relative error on $$e^{x}$ is very small
+% with 40 terms in the Taylor approximation, it is nonzero and therefore
+% it cannot be said that the Taylor series converges to the exact value
+% of $$e^{x}$. Interestingly, both the 40 term approximation and the real
+% value of $$e^{x}$ appear to be equivalent, yet the relative error is
+% nonzero. This is due to loss of significance on the floating point
+% calculation, which will be explored further in the following parts.
+%% Part 3. Cancellation Errors in the Taylor Approximation
+% The approach used in Part 2 will be used here to approximate
+% $$e^{-13.8}$. By modifying the above code, the following output is
+% produced:
+fprintf('exp(-13.8) is equal to: %e.\n', exp(-13.8));
+for i = 10 : 10 : 40
+    c = getTaylorCoeff(i); % determine Taylor expansion coefficients
+    r = horner(-13.8, c); % compute Horner scheme representation
+    rel_err2 = abs(r - exp(-13.8)) / exp(-13.8); % compute relative error
+    fprintf('The approximation for exp(-13.8) with %g terms is %e, ', i, r);
+    fprintf('and the relative error on exp(-13.8) with %g terms is %e.\n', i, rel_err2);
+end
+%%
+% Here, the calculated relative error is much larger than the absolute
+% error for exp(-13.8) and  the relative error found for $$e^{13.8}$.
+% While the approach used in Part 2 ought to work for this case, it fails
+% because the approximated value of $$e^{-13.8}$ is very close to the
+% value computed by exp(-13.8) and the subtraction used to calculate
+% the relative error produces a cancellation error because the result is a
+% number that is too small to be stored as a floating point number. This
+% results in a reduction of the accuracy of the subtraction operation, and
+% produces the larger than expected value for the relative error.
+% Therefore, it may be said that the convergence of the Taylor
+% approximation to the exact value of exp(-13.8) is extremely close but not
+% equivalent.
+%% Part 4. Cancellation Errors in the Taylor Approximation Continued
+% Now, the approach used in Part 2 will be used to approximate
+% $$\frac{1}{e^{13.8}}$. By modifying the code presented in Part 2 yet
+% again, the following output is produced:
+fprintf('1/exp(13.8) is equal to %e.\n', 1/exp(13.8));
+for i = 10 : 10 : 40
+    d = getTaylorCoeff(i); % determine Taylor expansion coefficients
+    s = 1/horner(13.8, d); % compute Horner scheme representation
+    rel_err3 = abs(s - exp(-13.8)) / exp(-13.8);
+    fprintf('The approximation for 1/exp(13.8) with %g terms is %e, ', i, s);
+    fprintf('and the relative error on 1/exp(13.8) with %g terms is %e.\n', i, rel_err3);
+end
+%%
+% In this example, $$\frac{1}{e^{13.8}}$ is formed by taking the reciprocal
+% of the approximated values calculated in Part 2, rather than determining
+% the value produced by the Horner Scheme with -13.8. This method produces
+% accurate approximations of $$\frac{1}{e^{13.8}}$, which is confirmed by
+% the calculated relative errors, and avoids the cancellation errors
+% produced in Part 3 because $$e^{13.8}$ is not prone to limit errors
+% caused by loss of accuracy in computing very large numbers, so taking its
+% reciprocal does not reduce the accuracy of the final result. Therefore,
+% the approximation for $$\frac{1}{e^{13.8}}$ is accurate. These examples
+% serve to illustrate the limitations of storing floating point numbers
+% with machine precision and how these limitations may be avoided.
+
+##### SOURCE END #####
+--></body></html>

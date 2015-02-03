@@ -9,4 +9,4 @@ function p=horner(x,a)
     for j=2:n
        p = p*x + a(j);
     end
-end    
+end
