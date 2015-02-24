@@ -1,7 +1,6 @@
-function c = bisect(a,b, N)
-
-ya = fcn(a);
-yb = fcn(b);
+function [c, res] = bisect(a,b, N, omega)
+ya = waveguide(a, omega);
+yb = waveguide(b, omega);
 
 if ( ya*yb > 0 ) 
     c = nan;
@@ -10,7 +9,7 @@ end
 
 for k=0:N
     c = 0.5*(a+b);
-    yc = fcn(c);
+    yc = waveguide(c, omega);
     if ( ya*yc < 0 )
         yb = yc;
         b = c;
@@ -21,8 +20,5 @@ for k=0:N
 end
 
 c = 0.5*(a+b);
-end
-
-function y = fcn(x)
-   y = x^2 - 2;
+res = abs(waveguide(c, omega));
 end
