@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>MATH 3315 Project 2 - Root Acquisition - By Zack Fout</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-03-02"><meta name="DC.source" content="proj2.m"><style type="text/css">
+      --><title>MATH 3315 Project 2 - Root Acquisition - By Zack Fout</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-03-03"><meta name="DC.source" content="proj2.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,7 +66,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1><b>MATH 3315 Project 2 - Root Acquisition - By Zack Fout</b></h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Part 1. The Characteristic Function of a Dielectric Slab Waveguide</a></li><li><a href="#3">Part 2. Root Acquisition using the Bisection Method</a></li><li><a href="#4">Part 3. Evaluating Different Frequency Values</a></li></ul></div><h2>Part 1. The Characteristic Function of a Dielectric Slab Waveguide<a name="1"></a></h2><p>An optical waveguide is a physical structure that guides electromagentic waves in the optical spectrum. Optical waveguides have many important engineering applications where they are typically used as the transmission medium for optical communications systems. The Slab Waveguide is a theoretical dielectric structure that is used to understand practical rectangular-geometry optical waveguides. The characteristic function of this waveguide is given by:</p><p><img src="proj2_eq46008.png" alt="$$f(\beta, \omega) = cos(\alpha_1)(\alpha_1 - {\alpha_1}{\alpha_0}) + sin(\alpha_1)({\alpha_1}^{2} - {\alpha_0}^{2})$">,</p><p>where</p><p><img src="proj2_eq20785.png" alt="$$\alpha_0 = \sqrt{\beta^{2} - {n_0}^{2}{\omega}^{2}}$"></p><p><img src="proj2_eq99549.png" alt="$$\alpha_1 = \sqrt{{n_1}^{2}{\omega}^{2} - \beta^{2}}$"></p><p>and <img src="proj2_eq16661.png" alt="$${n_0}$">, <img src="proj2_eq10646.png" alt="$${n_1}$"> are the refractive indices of the dielectric layers, <img src="proj2_eq93963.png" alt="$$\omega$"> is the frequency of the guided wave and <img src="proj2_eq83200.png" alt="$$\beta$"> is the propagation constant. In order to determine which optical waves are guided by the waveguide, the equation</p><p><img src="proj2_eq43614.png" alt="$$f(\beta, \omega) = 0$"></p><p>must be solved for <img src="proj2_eq83200.png" alt="$$\beta$"> where <img src="proj2_eq93963.png" alt="$$\omega$"> is a given parameter. If the refractive indices are fixed at <img src="proj2_eq53202.png" alt="$$n_0 = 1$"> and <img src="proj2_eq79952.png" alt="$$n_1 = 2$">, then different values of <img src="proj2_eq83200.png" alt="$$\beta$"> may be evaluated in order to determine the exact <img src="proj2_eq83200.png" alt="$$\beta$"> where the characteristic function is equal to zero. Note that from the definitions of <img src="proj2_eq32235.png" alt="$$\alpha_0$"> and <img src="proj2_eq58596.png" alt="$$\alpha_1$"> it is clear that real values of <img src="proj2_eq76529.png" alt="$$f(\beta, \omega)$"> may only be computed over the interval <img src="proj2_eq22789.png" alt="$$[{{n_0}\omega}, {{n_1}\omega}]$">. The following MATLAB&reg; code evaluates the characteristic function for a given value of <img src="proj2_eq09272.png" alt="$$\omega = 1$"> and plots the resulting curve:</p><pre class="codeinput">omega = 1.0;
+  </style></head><body><div class="content"><h1><b>MATH 3315 Project 2 - Root Acquisition - By Zack Fout</b></h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Part 1. The Characteristic Function of a Dielectric Slab Waveguide</a></li><li><a href="#3">Part 2. Root Acquisition using the Bisection Method</a></li><li><a href="#4">Part 3. Evaluating Different Frequency Values</a></li><li><a href="#6">Part 4. Root Acquisition using the Regula Falsi Method</a></li><li><a href="#8">Part 5. Regula Falsi With Extremely Small Epsilon Values</a></li></ul></div><h2>Part 1. The Characteristic Function of a Dielectric Slab Waveguide<a name="1"></a></h2><p>An optical waveguide is a physical structure that guides electromagentic waves in the optical spectrum. Optical waveguides have many important engineering applications where they are typically used as the transmission medium for optical communications systems. The Slab Waveguide is a theoretical dielectric structure that is used to understand practical rectangular-geometry optical waveguides. The characteristic function of this waveguide is given by:</p><p><img src="proj2_eq46008.png" alt="$$f(\beta, \omega) = cos(\alpha_1)(\alpha_1 - {\alpha_1}{\alpha_0}) + sin(\alpha_1)({\alpha_1}^{2} - {\alpha_0}^{2})$">,</p><p>where</p><p><img src="proj2_eq20785.png" alt="$$\alpha_0 = \sqrt{\beta^{2} - {n_0}^{2}{\omega}^{2}}$"></p><p><img src="proj2_eq99549.png" alt="$$\alpha_1 = \sqrt{{n_1}^{2}{\omega}^{2} - \beta^{2}}$"></p><p>and <img src="proj2_eq16661.png" alt="$${n_0}$">, <img src="proj2_eq10646.png" alt="$${n_1}$"> are the refractive indices of the dielectric layers, <img src="proj2_eq93963.png" alt="$$\omega$"> is the frequency of the guided wave and <img src="proj2_eq83200.png" alt="$$\beta$"> is the propagation constant. In order to determine which optical waves are guided by the waveguide, the equation</p><p><img src="proj2_eq43614.png" alt="$$f(\beta, \omega) = 0$"></p><p>must be solved for <img src="proj2_eq83200.png" alt="$$\beta$"> where <img src="proj2_eq93963.png" alt="$$\omega$"> is a given parameter. If the refractive indices are fixed at <img src="proj2_eq53202.png" alt="$$n_0 = 1$"> and <img src="proj2_eq79952.png" alt="$$n_1 = 2$">, then different values of <img src="proj2_eq83200.png" alt="$$\beta$"> may be evaluated in order to determine the exact <img src="proj2_eq83200.png" alt="$$\beta$"> where the characteristic function is equal to zero. Note that from the definitions of <img src="proj2_eq32235.png" alt="$$\alpha_0$"> and <img src="proj2_eq58596.png" alt="$$\alpha_1$"> it is clear that real values of <img src="proj2_eq76529.png" alt="$$f(\beta, \omega)$"> may only be computed over the interval <img src="proj2_eq22789.png" alt="$$[{{n_0}\omega}, {{n_1}\omega}]$">. The following MATLAB&reg; code evaluates the characteristic function for a given value of <img src="proj2_eq09272.png" alt="$$\omega = 1$"> and plots the resulting curve:</p><pre class="codeinput">omega = 1.0;
 beta = omega * linspace(1, 2, 1000); <span class="comment">% calculate interval of betas</span>
 <span class="keyword">for</span> i = 1 : 1000
     y(i) = waveguide(beta(i), omega); <span class="comment">% compute waveguide function</span>
@@ -75,15 +75,14 @@ beta = omega * linspace(1, 2, 1000); <span class="comment">% calculate interval 
 <span class="comment">% The following lines of code plot and format the waveguide function</span>
 figure(<span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
     <span class="string">'Position'</span>, [100 100 750 800]);
-set(gcf,<span class="string">'Color'</span>,[1,0.4,0.6]);
 hold <span class="string">on</span>;
-figLine = plot(beta, y, <span class="keyword">...</span>
+plot(beta, y, <span class="keyword">...</span>
     <span class="string">'LineStyle'</span>, <span class="string">'-'</span>, <span class="keyword">...</span>
     <span class="string">'LineWidth'</span>, 2, <span class="keyword">...</span>
     <span class="string">'Color'</span>, <span class="string">'c'</span>);
 
 hTitle = title(<span class="string">'Characteristic Function of a Dielectric Slab Waveguide'</span>);
-hXLabel = xlabel(<span class="string">'Propagation Constant $$(\omega)$$'</span>);
+hXLabel = xlabel(<span class="string">'Propagation Constant $$(\beta)$$'</span>);
 hYLabel = ylabel(<span class="string">'$$f(\beta, \omega)$$'</span>);
 
 set([hXLabel, hYLabel], <span class="keyword">...</span>
@@ -96,12 +95,10 @@ set(hTitle, <span class="keyword">...</span>
     <span class="string">'FontSize'</span>, 14, <span class="keyword">...</span>
     <span class="string">'FontWeight'</span>, <span class="string">'bold'</span>);
 
-brace1 = drawbrace([1.54, -.4], [1.54, .5], 8, <span class="string">'Color'</span>, <span class="string">'k'</span>);
-brace2 = drawbrace([1.60, .5], [1.60, -.4], 8, <span class="string">'Color'</span>, <span class="string">'k'</span>);
+drawbrace([1.54, -.45], [1.54, .45], 8, <span class="string">'Color'</span>, <span class="string">'k'</span>);
+drawbrace([1.58, .45], [1.58, -.45], 8, <span class="string">'Color'</span>, <span class="string">'k'</span>);
 
-hLegend = legend(figLine, <span class="keyword">...</span>
-    <span class="string">'$$f(\beta, \omega)$$'</span>, <span class="keyword">...</span>
-    <span class="string">'Location'</span>, <span class="string">'east'</span>);
+hLegend = legend(<span class="string">'$$f(\beta, \omega)$$'</span>,<span class="string">'Location'</span>, <span class="string">'east'</span>);
 set(hLegend, <span class="keyword">...</span>
     <span class="string">'FontSize'</span>, 16, <span class="keyword">...</span>
     <span class="string">'Interpreter'</span>, <span class="string">'latex'</span>);
@@ -119,18 +116,22 @@ set(gca, <span class="keyword">...</span>
     <span class="string">'XColor'</span>, [.3 .3 .3], <span class="keyword">...</span>
     <span class="string">'YColor'</span>, [.3 .3 .3], <span class="keyword">...</span>
     <span class="string">'LineWidth'</span>, 1);
-</pre><img vspace="5" hspace="5" src="proj2_01.png" alt=""> <p>As you can see by visually inspecting the graph, the solution <img src="proj2_eq83200.png" alt="$$\beta$"> to the equation <img src="proj2_eq43614.png" alt="$$f(\beta, \omega) = 0$"> lies somewhere between the values 1.56 and 1.57.</p><h2>Part 2. Root Acquisition using the Bisection Method<a name="3"></a></h2><p>The Bisection Method is an iterative approach that will be used here to approximate the exact root of the characteristic function. The method works by following a simple assumption: for a given continuous function over an interval [a, b], if f(a) is less than zero and f(b) is greater than zero, then the root of the function <i>must</i> lie within this interval. Then, the midpoint of the interval <i>c</i> is computed and the function is evaluated at c. If f(a) and f(c) have opposite signs, then the root must lie within [a, c] and the original interval [a, b] is split in half. Similarly, if instead f(c) and f(b) have opposite signs, then the interval is split into [c, b]. By iteratively calculating succesive intervals in this way a sufficiently small interval is found, and the function evaluated at the midpoint of this interval is used to approximate the true root. The function p2bisect.m implements the bisection method for the waveguide function, the results of which are shown below. Note that the frequency <img src="proj2_eq93963.png" alt="$$\omega$"> is still equal to one:</p><pre class="codeinput">a = 1.5;
+</pre><img vspace="5" hspace="5" src="proj2_01.png" alt=""> <p>As you can see by visually inspecting the graph, the solution <img src="proj2_eq83200.png" alt="$$\beta$"> to the equation <img src="proj2_eq43614.png" alt="$$f(\beta, \omega) = 0$"> lies somewhere between the values 1.56 and 1.57.</p><h2>Part 2. Root Acquisition using the Bisection Method<a name="3"></a></h2><p>The Bisection Method is an iterative approach that will be used here to approximate the exact root of the characteristic function. The method works by following a simple assumption: for a given continuous function over an interval [a, b], if f(a) is less than zero and f(b) is greater than zero, then the root of the function <i>must</i> lie within this interval. Then, the midpoint of the interval <i>c</i> is computed and the function is evaluated at c. If f(a) and f(c) have opposite signs, then the root must lie within [a, c] and the original interval [a, b] is split in half. Similarly, if instead f(c) and f(b) have opposite signs, then the interval is split into [c, b]. By iteratively calculating succesive intervals in this way a sufficiently small interval is found, and the function evaluated at the midpoint of this interval is used to approximate the true root. The function p2bisect.m implements the bisection method for the waveguide function, the results of which are shown below. Note that the frequency <img src="proj2_eq93963.png" alt="$$\omega$"> is still equal to one:</p><pre class="codeinput">epsilon = power(10, -12);
+
+a = 1.5;
 b = 1.6;
-N = bisect_iterations(a, b);
+N = 1 + round((log(b - a) - log(epsilon)) / log(2));
 [c, res] = p2bisect(a, b, N, omega);
+fprintf(<span class="string">'For omega = 1:\n'</span>);
 fprintf(<span class="string">'The approximated root of the waveguide function is: %.15f.\n'</span>, c);
 fprintf(<span class="string">'The number of iterations required '</span>);
-fprintf(<span class="string">'to compute the root are: %g.\n'</span>, N);
+fprintf(<span class="string">'to compute the root is: %g.\n'</span>, N);
 fprintf(<span class="string">'The residual of the root is: %d.\n'</span>, res);
-</pre><pre class="codeoutput">The approximated root of the waveguide function is: 1.565836654057603.
-The number of iterations required to compute the root are: 37.
-The residual of the root is: 6.580847e-13.
-</pre><h2>Part 3. Evaluating Different Frequency Values<a name="4"></a></h2><pre class="codeinput">omega = 8.0;
+</pre><pre class="codeoutput">For omega = 1:
+The approximated root of the waveguide function is: 1.565836654057512.
+The number of iterations required to compute the root is: 38.
+The residual of the root is: 9.992007e-14.
+</pre><h2>Part 3. Evaluating Different Frequency Values<a name="4"></a></h2><p>Because <img src="proj2_eq93963.png" alt="$$\omega$"> is a given parameter and the propagation constant is the value we are trying to find, supplying different values of <img src="proj2_eq93963.png" alt="$$\omega$"> to the waveguide function will produce different curves. If <img src="proj2_eq93963.png" alt="$$\omega$"> is set to 8, then the following graph is produced:</p><pre class="codeinput">omega = 8.0;
 beta = omega * linspace(1, 2, 1000); <span class="comment">% calculate interval of betas</span>
 <span class="keyword">for</span> i = 1 : 1000
     y(i) = waveguide(beta(i), omega); <span class="comment">% compute waveguide function</span>
@@ -138,13 +139,251 @@ beta = omega * linspace(1, 2, 1000); <span class="comment">% calculate interval 
 
 <span class="comment">% The following lines of code plot and format the waveguide function</span>
 figure(<span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
-    <span class="string">'Position'</span>, [100 100 1200 800]);
+    <span class="string">'Position'</span>, [100 100 1200 1000]);
 hold <span class="string">on</span>;
-figLine = plot(beta, y, <span class="keyword">...</span>
+plot(beta, y, <span class="keyword">...</span>
     <span class="string">'LineStyle'</span>, <span class="string">'-'</span>, <span class="keyword">...</span>
     <span class="string">'LineWidth'</span>, 2, <span class="keyword">...</span>
-    <span class="string">'Color'</span>, <span class="string">'c'</span>);
-</pre><img vspace="5" hspace="5" src="proj2_02.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014a</a><br></p></div><!--
+    <span class="string">'Color'</span>, <span class="string">'r'</span>);
+
+hTitle = title(<span class="string">'Characteristic Function of a Dielectric Slab Waveguide'</span>);
+hXLabel = xlabel(<span class="string">'Propagation Constant $$(\beta)$$'</span>);
+hYLabel = ylabel(<span class="string">'$$f(\beta, \omega)$$'</span>);
+
+set([hXLabel, hYLabel], <span class="keyword">...</span>
+    <span class="string">'FontSize'</span>, 20, <span class="keyword">...</span>
+    <span class="string">'Interpreter'</span>, <span class="string">'latex'</span>);
+set(hXLabel, <span class="string">'Position'</span>, get(hXLabel, <span class="string">'Position'</span>) - [0 25 0]);
+set(hYLabel, <span class="string">'Position'</span>, get(hYLabel, <span class="string">'Position'</span>) - [.15 0 0]);
+set(hTitle, <span class="keyword">...</span>
+    <span class="string">'FontName'</span>, <span class="string">'Courier 10 Pitch'</span>, <span class="keyword">...</span>
+    <span class="string">'FontSize'</span>, 14, <span class="keyword">...</span>
+    <span class="string">'FontWeight'</span>, <span class="string">'bold'</span>);
+
+drawbrace([9.45, -20], [9.45, 20], 8, <span class="string">'Color'</span>, <span class="string">'k'</span>);
+drawbrace([9.8, 20], [9.8, -20], 8, <span class="string">'Color'</span>, <span class="string">'k'</span>);
+
+drawbrace([11.5, -20], [11.5, 20], 8, <span class="string">'Color'</span>, <span class="string">'k'</span>);
+drawbrace([11.85, 20], [11.85, -20], 8, <span class="string">'Color'</span>, <span class="string">'k'</span>);
+
+drawbrace([13.2, -20], [13.2, 20], 8, <span class="string">'Color'</span>, <span class="string">'k'</span>);
+drawbrace([13.55, 20], [13.55, -20], 8, <span class="string">'Color'</span>, <span class="string">'k'</span>);
+
+drawbrace([14.75, -20], [14.75, 20], 8, <span class="string">'Color'</span>, <span class="string">'k'</span>);
+drawbrace([15.1, 20], [15.1, -20], 8, <span class="string">'Color'</span>, <span class="string">'k'</span>);
+
+drawbrace([15.55, -20], [15.55, 20], 8, <span class="string">'Color'</span>, <span class="string">'k'</span>);
+drawbrace([15.8, 20], [15.8, -20], 8, <span class="string">'Color'</span>, <span class="string">'k'</span>);
+
+hLegend = legend(<span class="string">'$$f(\beta, \omega)$$'</span>, <span class="string">'Location'</span>, <span class="string">'northeast'</span>);
+set(hLegend, <span class="keyword">...</span>
+    <span class="string">'FontSize'</span>, 16, <span class="keyword">...</span>
+    <span class="string">'Interpreter'</span>, <span class="string">'latex'</span>);
+
+set(gca, <span class="string">'FontName'</span>, <span class="string">'Helvetica'</span>);
+set(gca, <span class="keyword">...</span>
+    <span class="string">'Box'</span>, <span class="string">'off'</span>, <span class="keyword">...</span>
+    <span class="string">'TickDir'</span>, <span class="string">'out'</span>, <span class="keyword">...</span>
+    <span class="string">'TickLength'</span>, [.02 .02], <span class="keyword">...</span>
+    <span class="string">'XMinorTick'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+    <span class="string">'YMinorTick'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+    <span class="string">'YGrid'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+    <span class="string">'GridLineStyle'</span>, <span class="string">'--'</span>, <span class="keyword">...</span>
+    <span class="string">'YTick'</span>, -200:100:200, <span class="keyword">...</span>
+    <span class="string">'XColor'</span>, [.3 .3 .3], <span class="keyword">...</span>
+    <span class="string">'YColor'</span>, [.3 .3 .3], <span class="keyword">...</span>
+    <span class="string">'LineWidth'</span>, 1);
+</pre><img vspace="5" hspace="5" src="proj2_02.png" alt=""> <p>As you can see by visually inspecting the graph there are five different roots of the waveguide function when <img src="proj2_eq93963.png" alt="$$\omega$"> is equal to 8. The following code will compute the roots of this function using the bisection method:</p><pre class="codeinput">a = 9.0;
+b = 10.0;
+N = 1 + round((log(b - a) - log(epsilon)) / log(2));
+[c, res] = p2bisect(a, b, N, omega);
+fprintf(<span class="string">'\nFor omega = 8:\n'</span>);
+fprintf(<span class="string">'The first root of the waveguide function is: %.15f.\n'</span>, c);
+fprintf(<span class="string">'The number of iterations required '</span>);
+fprintf(<span class="string">'to compute the root is: %g.\n'</span>, N);
+fprintf(<span class="string">'The residual of the root is: %d.\n'</span>, res);
+
+a = 11.0;
+b = 12.0;
+N = 1 + round((log(b - a) - log(epsilon)) / log(2));
+[c, res] = p2bisect(a, b, N, omega);
+fprintf(<span class="string">'\nThe second root of the waveguide function is: %.15f.\n'</span>, c);
+fprintf(<span class="string">'The number of iterations required '</span>);
+fprintf(<span class="string">'to compute the root is: %g.\n'</span>, N);
+fprintf(<span class="string">'The residual of the root is: %d.\n'</span>, res);
+
+a = 13.0;
+b = 14.0;
+N = 1 + round((log(b - a) - log(epsilon)) / log(2));
+[c, res] = p2bisect(a, b, N, omega);
+fprintf(<span class="string">'\nThe third root of the waveguide function is: %.15f.\n'</span>, c);
+fprintf(<span class="string">'The number of iterations required '</span>);
+fprintf(<span class="string">'to compute the root is: %g.\n'</span>, N);
+fprintf(<span class="string">'The residual of the root is: %d.\n'</span>, res);
+
+a = 14.0;
+b = 15.0;
+N = 1 + round((log(b - a) - log(epsilon)) / log(2));
+[c, res] = p2bisect(a, b, N, omega);
+fprintf(<span class="string">'\nThe fourth root of the waveguide function is: %.15f.\n'</span>, c);
+fprintf(<span class="string">'The number of iterations required '</span>);
+fprintf(<span class="string">'to compute the root is: %g.\n'</span>, N);
+fprintf(<span class="string">'The residual of the root is: %d.\n'</span>, res);
+
+a = 15.0;
+b = 16.0;
+N = 1 + round((log(b - a) - log(epsilon)) / log(2));
+[c, res] = p2bisect(a, b, N, omega);
+fprintf(<span class="string">'\nThe fifth root of the waveguide function is: %.15f.\n'</span>, c);
+fprintf(<span class="string">'The number of iterations required '</span>);
+fprintf(<span class="string">'to compute the root is: %g.\n'</span>, N);
+fprintf(<span class="string">'The residual of the root is: %d.\n'</span>, res);
+</pre><pre class="codeoutput">
+For omega = 8:
+The first root of the waveguide function is: 9.602726561589975.
+The number of iterations required to compute the root is: 41.
+The residual of the root is: 1.899636e-11.
+
+The second root of the waveguide function is: 11.658882176556176.
+The number of iterations required to compute the root is: 41.
+The residual of the root is: 1.602984e-11.
+
+The third root of the waveguide function is: 13.378611046994934.
+The number of iterations required to compute the root is: 41.
+The residual of the root is: 1.275424e-12.
+
+The fourth root of the waveguide function is: 14.939079451917792.
+The number of iterations required to compute the root is: 41.
+The residual of the root is: 1.128342e-11.
+
+The fifth root of the waveguide function is: 15.657409685803827.
+The number of iterations required to compute the root is: 41.
+The residual of the root is: 4.171241e-11.
+</pre><h2>Part 4. Root Acquisition using the Regula Falsi Method<a name="6"></a></h2><p>The Regula Falsi Method is another iterative approach to calculating the root of a function that was developed because the Bisection Method converges at a fairly slow rate. Regula Falsi works by computing the secant line of the desired function, and computing the values of a and b on the secant line. Then, the interval is shrunk by using the same logic implemented in the Bisection Method. The results of the Regula Falsi Method for the waveguide function are shown below. Note that omega is equal to eight:</p><pre class="codeinput">a = 9.0;
+b = 10.0;
+[c, N, res] = regulafalsi(a, b, epsilon, omega);
+fprintf(<span class="string">'\nFor omega = 8 and epsilon = 1e-12:\n'</span>);
+fprintf(<span class="string">'The first root of the waveguide function is: %.15f.\n'</span>, c);
+fprintf(<span class="string">'The number of iterations required '</span>);
+fprintf(<span class="string">'to compute the root is: %g.\n'</span>, N);
+fprintf(<span class="string">'The residual of the root is: %d.\n'</span>, res);
+
+a = 11.0;
+b = 12.0;
+[c, N, res] = regulafalsi(a, b, epsilon, omega);
+fprintf(<span class="string">'\nThe second root of the waveguide function is: %.15f.\n'</span>, c);
+fprintf(<span class="string">'The number of iterations required '</span>);
+fprintf(<span class="string">'to compute the root is: %g.\n'</span>, N);
+fprintf(<span class="string">'The residual of the root is: %d.\n'</span>, res);
+
+a = 13.0;
+b = 14.0;
+[c, N, res] = regulafalsi(a, b, epsilon, omega);
+fprintf(<span class="string">'\nThe third root of the waveguide function is: %.15f.\n'</span>, c);
+fprintf(<span class="string">'The number of iterations required '</span>);
+fprintf(<span class="string">'to compute the root is: %g.\n'</span>, N);
+fprintf(<span class="string">'The residual of the root is: %d.\n'</span>, res);
+
+a = 14.0;
+b = 15.0;
+[c, N, res] = regulafalsi(a, b, epsilon, omega);
+fprintf(<span class="string">'\nThe fourth root of the waveguide function is: %.15f.\n'</span>, c);
+fprintf(<span class="string">'The number of iterations required '</span>);
+fprintf(<span class="string">'to compute the root is: %g.\n'</span>, N);
+fprintf(<span class="string">'The residual of the root is: %d.\n'</span>, res);
+
+a = 14.95;
+b = 15.95;
+[c, N, res] = regulafalsi(a, b, epsilon, omega);
+fprintf(<span class="string">'\nThe fifth root of the waveguide function is: %.15f.\n'</span>, c);
+fprintf(<span class="string">'The number of iterations required '</span>);
+fprintf(<span class="string">'to compute the root is: %g.\n'</span>, N);
+fprintf(<span class="string">'The residual of the root is: %d.\n'</span>, res);
+</pre><pre class="codeoutput">
+For omega = 8 and epsilon = 1e-12:
+The first root of the waveguide function is: 9.602726561589881.
+The number of iterations required to compute the root is: 5.
+The residual of the root is: 1.918465e-13.
+
+The second root of the waveguide function is: 11.658882176556288.
+The number of iterations required to compute the root is: 6.
+The residual of the root is: 6.394885e-14.
+
+The third root of the waveguide function is: 13.378611046994926.
+The number of iterations required to compute the root is: 6.
+The residual of the root is: 1.492140e-13.
+
+The fourth root of the waveguide function is: 14.939079451917756.
+The number of iterations required to compute the root is: 6.
+The residual of the root is: 6.110668e-13.
+
+The fifth root of the waveguide function is: 15.657409685803884.
+The number of iterations required to compute the root is: 11.
+The residual of the root is: 5.897505e-13.
+</pre><p>As you can see, the Regula Falsi method requires far fewer iterations than are required by the Bisection Method, making it the more computationally efficient algorithm.</p><h2>Part 5. Regula Falsi With Extremely Small Epsilon Values<a name="8"></a></h2><p>If the stopping criterium value epsilon is a very small floating point number near 1e-17, say 1e-15, then performing a subtraction operation with this number will result in catastrophic cancellation and massive loss of precision in the computed value. In the regulafalsi.m function the stopping criterium is reached when the function value at the midpoint c is less than epsilon. However in the last iteration of the function where the function value at c is <i>almost</i> less than epsilon, before f(c) &lt; epsilon is evaluated the function value at c must be computed. The waveguide function, however, squares c intermediately and subtracts it from omega squared thus producing a number less than 1e-15. This produces a catastrophic cancellation error which skews the resulting approximation of the root. While this means that the waveguide function cannot be implemented with double-precision floating point numbers less than 1e-13, the result of the catastrophic cancellation may be emulated by simply setting epsilon equal to one, as is shown below:</p><pre class="codeinput">epsilon = 1;
+
+a = 9.0;
+b = 10.0;
+[c, N, res] = regulafalsi(a, b, epsilon, omega);
+fprintf(<span class="string">'\nFor omega = 8 and epsilon = 1e-15:\n'</span>);
+fprintf(<span class="string">'The first root of the waveguide function is: %.15f.\n'</span>, c);
+fprintf(<span class="string">'The number of iterations required '</span>);
+fprintf(<span class="string">'to compute the root is: %g.\n'</span>, N);
+fprintf(<span class="string">'The residual of the root is: %d.\n'</span>, res);
+
+a = 11.0;
+b = 12.0;
+[c, N, res] = regulafalsi(a, b, epsilon, omega);
+fprintf(<span class="string">'\nThe second root of the waveguide function is: %.15f.\n'</span>, c);
+fprintf(<span class="string">'The number of iterations required '</span>);
+fprintf(<span class="string">'to compute the root is: %g.\n'</span>, N);
+fprintf(<span class="string">'The residual of the root is: %d.\n'</span>, res);
+
+a = 13.0;
+b = 14.0;
+[c, N, res] = regulafalsi(a, b, epsilon, omega);
+fprintf(<span class="string">'\nThe third root of the waveguide function is: %.15f.\n'</span>, c);
+fprintf(<span class="string">'The number of iterations required '</span>);
+fprintf(<span class="string">'to compute the root is: %g.\n'</span>, N);
+fprintf(<span class="string">'The residual of the root is: %d.\n'</span>, res);
+
+a = 14.0;
+b = 15.0;
+[c, N, res] = regulafalsi(a, b, epsilon, omega);
+fprintf(<span class="string">'\nThe fourth root of the waveguide function is: %.15f.\n'</span>, c);
+fprintf(<span class="string">'The number of iterations required '</span>);
+fprintf(<span class="string">'to compute the root is: %g.\n'</span>, N);
+fprintf(<span class="string">'The residual of the root is: %d.\n'</span>, res);
+
+a = 14.95;
+b = 15.95;
+[c, N, res] = regulafalsi(a, b, epsilon, omega);
+fprintf(<span class="string">'\nThe fifth root of the waveguide function is: %.15f.\n'</span>, c);
+fprintf(<span class="string">'The number of iterations required '</span>);
+fprintf(<span class="string">'to compute the root is: %g.\n'</span>, N);
+fprintf(<span class="string">'The residual of the root is: %d.\n'</span>, res);
+</pre><pre class="codeoutput">
+For omega = 8 and epsilon = 1e-15:
+The first root of the waveguide function is: 9.602629815907058.
+The number of iterations required to compute the root is: 2.
+The residual of the root is: 1.948814e-02.
+
+The second root of the waveguide function is: 11.655609524558537.
+The number of iterations required to compute the root is: 1.
+The residual of the root is: 4.712851e-01.
+
+The third root of the waveguide function is: 13.379136865379724.
+The number of iterations required to compute the root is: 2.
+The residual of the root is: 9.573695e-02.
+
+The fourth root of the waveguide function is: 14.938160229426192.
+The number of iterations required to compute the root is: 2.
+The residual of the root is: 3.116346e-01.
+
+The fifth root of the waveguide function is: 15.657859780193075.
+The number of iterations required to compute the root is: 7.
+The residual of the root is: 3.238737e-01.
+</pre><p>As you can see, this produces a significantly larger residual on the root than the previous computed values with epsilon equal to 1e-12, thus approximating the results of catastrophic cancellation.</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% *MATH 3315 Project 2 - Root Acquisition - By Zack Fout*
 %% Part 1. The Characteristic Function of a Dielectric Slab Waveguide
@@ -181,7 +420,6 @@ figLine = plot(beta, y, <span class="keyword">...</span>
 % $$[{{n_0}\omega}, {{n_1}\omega}]$. The following MATLAB(R) code evaluates
 % the characteristic function for a given value of $$\omega = 1$ and plots
 % the resulting curve:
-
 omega = 1.0;
 beta = omega * linspace(1, 2, 1000); % calculate interval of betas
 for i = 1 : 1000
@@ -191,15 +429,14 @@ end
 % The following lines of code plot and format the waveguide function
 figure('Units', 'pixels', ...
     'Position', [100 100 750 800]);
-set(gcf,'Color',[1,0.4,0.6]);
 hold on;
-figLine = plot(beta, y, ...
+plot(beta, y, ...
     'LineStyle', '-', ...
     'LineWidth', 2, ...
     'Color', 'c');
 
 hTitle = title('Characteristic Function of a Dielectric Slab Waveguide');
-hXLabel = xlabel('Propagation Constant $$(\omega)$$');
+hXLabel = xlabel('Propagation Constant $$(\beta)$$');
 hYLabel = ylabel('$$f(\beta, \omega)$$');
 
 set([hXLabel, hYLabel], ...
@@ -212,12 +449,10 @@ set(hTitle, ...
     'FontSize', 14, ...
     'FontWeight', 'bold');
 
-brace1 = drawbrace([1.54, -.4], [1.54, .5], 8, 'Color', 'k');
-brace2 = drawbrace([1.60, .5], [1.60, -.4], 8, 'Color', 'k');
+drawbrace([1.54, -.45], [1.54, .45], 8, 'Color', 'k');
+drawbrace([1.58, .45], [1.58, -.45], 8, 'Color', 'k');
 
-hLegend = legend(figLine, ...
-    '$$f(\beta, \omega)$$', ...
-    'Location', 'east');
+hLegend = legend('$$f(\beta, \omega)$$','Location', 'east');
 set(hLegend, ...
     'FontSize', 16, ...
     'Interpreter', 'latex');
@@ -255,16 +490,22 @@ set(gca, ...
 % approximate the true root. The function p2bisect.m implements the
 % bisection method for the waveguide function, the results of which are
 % shown below. Note that the frequency $$\omega$ is still equal to one:
+epsilon = power(10, -12);
 
 a = 1.5;
 b = 1.6;
-N = bisect_iterations(a, b);
+N = 1 + round((log(b - a) - log(epsilon)) / log(2));
 [c, res] = p2bisect(a, b, N, omega);
+fprintf('For omega = 1:\n');
 fprintf('The approximated root of the waveguide function is: %.15f.\n', c);
 fprintf('The number of iterations required ');
-fprintf('to compute the root are: %g.\n', N);
+fprintf('to compute the root is: %g.\n', N);
 fprintf('The residual of the root is: %d.\n', res);
 %% Part 3. Evaluating Different Frequency Values
+% Because $$\omega$ is a given parameter and the propagation constant is
+% the value we are trying to find, supplying different values of $$\omega$
+% to the waveguide function will produce different curves. If $$\omega$ is
+% set to 8, then the following graph is produced:
 
 omega = 8.0;
 beta = omega * linspace(1, 2, 1000); % calculate interval of betas
@@ -274,12 +515,224 @@ end
 
 % The following lines of code plot and format the waveguide function
 figure('Units', 'pixels', ...
-    'Position', [100 100 1200 800]);
+    'Position', [100 100 1200 1000]);
 hold on;
-figLine = plot(beta, y, ...
+plot(beta, y, ...
     'LineStyle', '-', ...
     'LineWidth', 2, ...
-    'Color', 'c');
+    'Color', 'r');
 
+hTitle = title('Characteristic Function of a Dielectric Slab Waveguide');
+hXLabel = xlabel('Propagation Constant $$(\beta)$$');
+hYLabel = ylabel('$$f(\beta, \omega)$$');
+
+set([hXLabel, hYLabel], ...
+    'FontSize', 20, ...
+    'Interpreter', 'latex');
+set(hXLabel, 'Position', get(hXLabel, 'Position') - [0 25 0]);
+set(hYLabel, 'Position', get(hYLabel, 'Position') - [.15 0 0]);
+set(hTitle, ...
+    'FontName', 'Courier 10 Pitch', ...
+    'FontSize', 14, ...
+    'FontWeight', 'bold');
+
+drawbrace([9.45, -20], [9.45, 20], 8, 'Color', 'k');
+drawbrace([9.8, 20], [9.8, -20], 8, 'Color', 'k');
+
+drawbrace([11.5, -20], [11.5, 20], 8, 'Color', 'k');
+drawbrace([11.85, 20], [11.85, -20], 8, 'Color', 'k');
+
+drawbrace([13.2, -20], [13.2, 20], 8, 'Color', 'k');
+drawbrace([13.55, 20], [13.55, -20], 8, 'Color', 'k');
+
+drawbrace([14.75, -20], [14.75, 20], 8, 'Color', 'k');
+drawbrace([15.1, 20], [15.1, -20], 8, 'Color', 'k');
+
+drawbrace([15.55, -20], [15.55, 20], 8, 'Color', 'k');
+drawbrace([15.8, 20], [15.8, -20], 8, 'Color', 'k');
+
+hLegend = legend('$$f(\beta, \omega)$$', 'Location', 'northeast');
+set(hLegend, ...
+    'FontSize', 16, ...
+    'Interpreter', 'latex');
+
+set(gca, 'FontName', 'Helvetica');
+set(gca, ...
+    'Box', 'off', ...
+    'TickDir', 'out', ...
+    'TickLength', [.02 .02], ...
+    'XMinorTick', 'on', ...
+    'YMinorTick', 'on', ...
+    'YGrid', 'on', ...
+    'GridLineStyle', 'REPLACE_WITH_DASH_DASH', ...
+    'YTick', -200:100:200, ...
+    'XColor', [.3 .3 .3], ...
+    'YColor', [.3 .3 .3], ...
+    'LineWidth', 1);
+%%
+% As you can see by visually inspecting the graph there are five different
+% roots of the waveguide function when $$\omega$ is equal to 8. The
+% following code will compute the roots of this function using the
+% bisection method:
+a = 9.0;
+b = 10.0;
+N = 1 + round((log(b - a) - log(epsilon)) / log(2));
+[c, res] = p2bisect(a, b, N, omega);
+fprintf('\nFor omega = 8:\n');
+fprintf('The first root of the waveguide function is: %.15f.\n', c);
+fprintf('The number of iterations required ');
+fprintf('to compute the root is: %g.\n', N);
+fprintf('The residual of the root is: %d.\n', res);
+
+a = 11.0;
+b = 12.0;
+N = 1 + round((log(b - a) - log(epsilon)) / log(2));
+[c, res] = p2bisect(a, b, N, omega);
+fprintf('\nThe second root of the waveguide function is: %.15f.\n', c);
+fprintf('The number of iterations required ');
+fprintf('to compute the root is: %g.\n', N);
+fprintf('The residual of the root is: %d.\n', res);
+
+a = 13.0;
+b = 14.0;
+N = 1 + round((log(b - a) - log(epsilon)) / log(2));
+[c, res] = p2bisect(a, b, N, omega);
+fprintf('\nThe third root of the waveguide function is: %.15f.\n', c);
+fprintf('The number of iterations required ');
+fprintf('to compute the root is: %g.\n', N);
+fprintf('The residual of the root is: %d.\n', res);
+
+a = 14.0;
+b = 15.0;
+N = 1 + round((log(b - a) - log(epsilon)) / log(2));
+[c, res] = p2bisect(a, b, N, omega);
+fprintf('\nThe fourth root of the waveguide function is: %.15f.\n', c);
+fprintf('The number of iterations required ');
+fprintf('to compute the root is: %g.\n', N);
+fprintf('The residual of the root is: %d.\n', res);
+
+a = 15.0;
+b = 16.0;
+N = 1 + round((log(b - a) - log(epsilon)) / log(2));
+[c, res] = p2bisect(a, b, N, omega);
+fprintf('\nThe fifth root of the waveguide function is: %.15f.\n', c);
+fprintf('The number of iterations required ');
+fprintf('to compute the root is: %g.\n', N);
+fprintf('The residual of the root is: %d.\n', res);
+%% Part 4. Root Acquisition using the Regula Falsi Method
+% The Regula Falsi Method is another iterative approach to calculating the
+% root of a function that was developed because the Bisection Method
+% converges at a fairly slow rate. Regula Falsi works by computing the
+% secant line of the desired function, and computing the values of a and b
+% on the secant line. Then, the interval is shrunk by using the same logic
+% implemented in the Bisection Method. The results of the Regula Falsi
+% Method for the waveguide function are shown below. Note that omega is
+% equal to eight:
+a = 9.0;
+b = 10.0;
+[c, N, res] = regulafalsi(a, b, epsilon, omega);
+fprintf('\nFor omega = 8 and epsilon = 1e-12:\n');
+fprintf('The first root of the waveguide function is: %.15f.\n', c);
+fprintf('The number of iterations required ');
+fprintf('to compute the root is: %g.\n', N);
+fprintf('The residual of the root is: %d.\n', res);
+
+a = 11.0;
+b = 12.0;
+[c, N, res] = regulafalsi(a, b, epsilon, omega);
+fprintf('\nThe second root of the waveguide function is: %.15f.\n', c);
+fprintf('The number of iterations required ');
+fprintf('to compute the root is: %g.\n', N);
+fprintf('The residual of the root is: %d.\n', res);
+
+a = 13.0;
+b = 14.0;
+[c, N, res] = regulafalsi(a, b, epsilon, omega);
+fprintf('\nThe third root of the waveguide function is: %.15f.\n', c);
+fprintf('The number of iterations required ');
+fprintf('to compute the root is: %g.\n', N);
+fprintf('The residual of the root is: %d.\n', res);
+
+a = 14.0;
+b = 15.0;
+[c, N, res] = regulafalsi(a, b, epsilon, omega);
+fprintf('\nThe fourth root of the waveguide function is: %.15f.\n', c);
+fprintf('The number of iterations required ');
+fprintf('to compute the root is: %g.\n', N);
+fprintf('The residual of the root is: %d.\n', res);
+
+a = 14.95;
+b = 15.95;
+[c, N, res] = regulafalsi(a, b, epsilon, omega);
+fprintf('\nThe fifth root of the waveguide function is: %.15f.\n', c);
+fprintf('The number of iterations required ');
+fprintf('to compute the root is: %g.\n', N);
+fprintf('The residual of the root is: %d.\n', res);
+%%
+% As you can see, the Regula Falsi method requires far fewer iterations
+% than are required by the Bisection Method, making it the more
+% computationally efficient algorithm.
+%% Part 5. Regula Falsi With Extremely Small Epsilon Values
+% If the stopping criterium value epsilon is a very small floating point
+% number near 1e-17, say 1e-15, then performing a subtraction operation
+% with this number will result in catastrophic cancellation and massive
+% loss of precision in the computed value. In the regulafalsi.m function
+% the stopping criterium is reached when the function value at the midpoint
+% c is less than epsilon. However in the last iteration of the function
+% where the function value at c is _almost_ less than epsilon, before f(c)
+% < epsilon is evaluated the function value at c must be computed. 
+% The waveguide function, however, squares c intermediately and subtracts
+% it from omega squared thus producing a number less than 1e-15. This 
+% produces a catastrophic cancellation error which skews the resulting 
+% approximation of the root. While this means that the waveguide function
+% cannot be implemented with double-precision floating point numbers less
+% than 1e-13, the result of the catastrophic cancellation may be emulated
+% by simply setting epsilon equal to one, as is shown below:
+epsilon = 1;
+
+a = 9.0;
+b = 10.0;
+[c, N, res] = regulafalsi(a, b, epsilon, omega);
+fprintf('\nFor omega = 8 and epsilon = 1e-15:\n');
+fprintf('The first root of the waveguide function is: %.15f.\n', c);
+fprintf('The number of iterations required ');
+fprintf('to compute the root is: %g.\n', N);
+fprintf('The residual of the root is: %d.\n', res);
+
+a = 11.0;
+b = 12.0;
+[c, N, res] = regulafalsi(a, b, epsilon, omega);
+fprintf('\nThe second root of the waveguide function is: %.15f.\n', c);
+fprintf('The number of iterations required ');
+fprintf('to compute the root is: %g.\n', N);
+fprintf('The residual of the root is: %d.\n', res);
+
+a = 13.0;
+b = 14.0;
+[c, N, res] = regulafalsi(a, b, epsilon, omega);
+fprintf('\nThe third root of the waveguide function is: %.15f.\n', c);
+fprintf('The number of iterations required ');
+fprintf('to compute the root is: %g.\n', N);
+fprintf('The residual of the root is: %d.\n', res);
+
+a = 14.0;
+b = 15.0;
+[c, N, res] = regulafalsi(a, b, epsilon, omega);
+fprintf('\nThe fourth root of the waveguide function is: %.15f.\n', c);
+fprintf('The number of iterations required ');
+fprintf('to compute the root is: %g.\n', N);
+fprintf('The residual of the root is: %d.\n', res);
+
+a = 14.95;
+b = 15.95;
+[c, N, res] = regulafalsi(a, b, epsilon, omega);
+fprintf('\nThe fifth root of the waveguide function is: %.15f.\n', c);
+fprintf('The number of iterations required ');
+fprintf('to compute the root is: %g.\n', N);
+fprintf('The residual of the root is: %d.\n', res);
+%%
+% As you can see, this produces a significantly larger residual on the root
+% than the previous computed values with epsilon equal to 1e-12, thus
+% approximating the results of catastrophic cancellation.
 ##### SOURCE END #####
 --></body></html>

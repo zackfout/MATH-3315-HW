@@ -10,24 +10,10 @@
 % note: n0 and n1 are optional parameters whose default values are 1 and
 % 2 respectively.
 %
-function y = waveguide(beta, omega, varargin)
-  % this block of code handles input validation and optional params
-  p = inputParser; % initialize a function input parser
-  addRequired(p,'beta', @isnumeric); % require the beta param
-  addRequired(p,'omega', @isnumeric); % require the omega param
-  addOptional(p, 'n_0', 1, @isnumeric); % optional
-  addOptional(p, 'n_1', 2, @isnumeric); % optional
-  parse(p, beta, omega, varargin{:}); % validate inputs
-  
-  % assign temporary values to input results
-  beta = power(p.Results.beta, 2);
-  omega = power(p.Results.omega, 2);
-  n_0 = power(p.Results.n_0, 2);
-  n_1 = power(p.Results.n_1, 2);
-  
+function y = waveguide(beta, omega)
   % compute a0 and a1
-  a_0 = sqrt(beta - (n_0 * omega));
-  a_1 = sqrt((n_1 * omega) - beta);
+  a_0 = sqrt(power(beta, 2) - power(omega, 2));
+  a_1 = sqrt((4 * power(omega, 2)) - power(beta, 2));
   
   % compute the characteristic equation
   arg1 = cos(a_0) * (a_1 - (a_1 * a_0));

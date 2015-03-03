@@ -33,7 +33,6 @@
 % $$[{{n_0}\omega}, {{n_1}\omega}]$. The following MATLAB(R) code evaluates
 % the characteristic function for a given value of $$\omega = 1$ and plots
 % the resulting curve:
-
 omega = 1.0;
 beta = omega * linspace(1, 2, 1000); % calculate interval of betas
 for i = 1 : 1000
@@ -104,15 +103,16 @@ set(gca, ...
 % approximate the true root. The function p2bisect.m implements the
 % bisection method for the waveguide function, the results of which are
 % shown below. Note that the frequency $$\omega$ is still equal to one:
+epsilon = power(10, -12);
 
 a = 1.5;
 b = 1.6;
-N = bisect_iterations(a, b);
+N = 1 + round((log(b - a) - log(epsilon)) / log(2));
 [c, res] = p2bisect(a, b, N, omega);
 fprintf('For omega = 1:\n');
 fprintf('The approximated root of the waveguide function is: %.15f.\n', c);
 fprintf('The number of iterations required ');
-fprintf('to compute the root are: %g.\n', N);
+fprintf('to compute the root is: %g.\n', N);
 fprintf('The residual of the root is: %d.\n', res);
 %% Part 3. Evaluating Different Frequency Values
 % Because $$\omega$ is a given parameter and the propagation constant is
@@ -128,7 +128,7 @@ end
 
 % The following lines of code plot and format the waveguide function
 figure('Units', 'pixels', ...
-    'Position', [100 100 1200 800]);
+    'Position', [100 100 1200 1000]);
 hold on;
 plot(beta, y, ...
     'LineStyle', '-', ...
@@ -142,8 +142,8 @@ hYLabel = ylabel('$$f(\beta, \omega)$$');
 set([hXLabel, hYLabel], ...
     'FontSize', 20, ...
     'Interpreter', 'latex');
-set(hXLabel, 'Position', get(hXLabel, 'Position') - [0 .3 0]);
-set(hYLabel, 'Position', get(hYLabel, 'Position') - [.04 0 0]);
+set(hXLabel, 'Position', get(hXLabel, 'Position') - [0 25 0]);
+set(hYLabel, 'Position', get(hYLabel, 'Position') - [.15 0 0]);
 set(hTitle, ...
     'FontName', 'Courier 10 Pitch', ...
     'FontSize', 14, ...
@@ -187,35 +187,163 @@ set(gca, ...
 % roots of the waveguide function when $$\omega$ is equal to 8. The
 % following code will compute the roots of this function using the
 % bisection method:
-
 a = 9.0;
 b = 10.0;
-N = bisect_iterations(a, b);
-c = p2bisect(a, b, N, omega);
+N = 1 + round((log(b - a) - log(epsilon)) / log(2));
+[c, res] = p2bisect(a, b, N, omega);
 fprintf('\nFor omega = 8:\n');
 fprintf('The first root of the waveguide function is: %.15f.\n', c);
+fprintf('The number of iterations required ');
+fprintf('to compute the root is: %g.\n', N);
+fprintf('The residual of the root is: %d.\n', res);
 
 a = 11.0;
 b = 12.0;
-N = bisect_iterations(a, b);
-c = p2bisect(a, b, N, omega);
-fprintf('The second root of the waveguide function is: %.15f.\n', c);
+N = 1 + round((log(b - a) - log(epsilon)) / log(2));
+[c, res] = p2bisect(a, b, N, omega);
+fprintf('\nThe second root of the waveguide function is: %.15f.\n', c);
+fprintf('The number of iterations required ');
+fprintf('to compute the root is: %g.\n', N);
+fprintf('The residual of the root is: %d.\n', res);
 
 a = 13.0;
 b = 14.0;
-N = bisect_iterations(a, b);
-c = p2bisect(a, b, N, omega);
-fprintf('The third root of the waveguide function is: %.15f.\n', c);
+N = 1 + round((log(b - a) - log(epsilon)) / log(2));
+[c, res] = p2bisect(a, b, N, omega);
+fprintf('\nThe third root of the waveguide function is: %.15f.\n', c);
+fprintf('The number of iterations required ');
+fprintf('to compute the root is: %g.\n', N);
+fprintf('The residual of the root is: %d.\n', res);
 
 a = 14.0;
 b = 15.0;
-N = bisect_iterations(a, b);
-c = p2bisect(a, b, N, omega);
-fprintf('The fourth root of the waveguide function is: %.15f.\n', c);
+N = 1 + round((log(b - a) - log(epsilon)) / log(2));
+[c, res] = p2bisect(a, b, N, omega);
+fprintf('\nThe fourth root of the waveguide function is: %.15f.\n', c);
+fprintf('The number of iterations required ');
+fprintf('to compute the root is: %g.\n', N);
+fprintf('The residual of the root is: %d.\n', res);
 
 a = 15.0;
 b = 16.0;
-N = bisect_iterations(a, b);
-c = p2bisect(a, b, N, omega);
-fprintf('The fifth root of the waveguide function is: %.15f.\n', c);
-%% Root Acquisition using the Regula Falsi Method
+N = 1 + round((log(b - a) - log(epsilon)) / log(2));
+[c, res] = p2bisect(a, b, N, omega);
+fprintf('\nThe fifth root of the waveguide function is: %.15f.\n', c);
+fprintf('The number of iterations required ');
+fprintf('to compute the root is: %g.\n', N);
+fprintf('The residual of the root is: %d.\n', res);
+%% Part 4. Root Acquisition using the Regula Falsi Method
+% The Regula Falsi Method is another iterative approach to calculating the
+% root of a function that was developed because the Bisection Method
+% converges at a fairly slow rate. Regula Falsi works by computing the
+% secant line of the desired function, and computing the values of a and b
+% on the secant line. Then, the interval is shrunk by using the same logic
+% implemented in the Bisection Method. The results of the Regula Falsi
+% Method for the waveguide function are shown below. Note that omega is
+% equal to eight:
+a = 9.0;
+b = 10.0;
+[c, N, res] = regulafalsi(a, b, epsilon, omega);
+fprintf('\nFor omega = 8 and epsilon = 1e-12:\n');
+fprintf('The first root of the waveguide function is: %.15f.\n', c);
+fprintf('The number of iterations required ');
+fprintf('to compute the root is: %g.\n', N);
+fprintf('The residual of the root is: %d.\n', res);
+
+a = 11.0;
+b = 12.0;
+[c, N, res] = regulafalsi(a, b, epsilon, omega);
+fprintf('\nThe second root of the waveguide function is: %.15f.\n', c);
+fprintf('The number of iterations required ');
+fprintf('to compute the root is: %g.\n', N);
+fprintf('The residual of the root is: %d.\n', res);
+
+a = 13.0;
+b = 14.0;
+[c, N, res] = regulafalsi(a, b, epsilon, omega);
+fprintf('\nThe third root of the waveguide function is: %.15f.\n', c);
+fprintf('The number of iterations required ');
+fprintf('to compute the root is: %g.\n', N);
+fprintf('The residual of the root is: %d.\n', res);
+
+a = 14.0;
+b = 15.0;
+[c, N, res] = regulafalsi(a, b, epsilon, omega);
+fprintf('\nThe fourth root of the waveguide function is: %.15f.\n', c);
+fprintf('The number of iterations required ');
+fprintf('to compute the root is: %g.\n', N);
+fprintf('The residual of the root is: %d.\n', res);
+
+a = 14.95;
+b = 15.95;
+[c, N, res] = regulafalsi(a, b, epsilon, omega);
+fprintf('\nThe fifth root of the waveguide function is: %.15f.\n', c);
+fprintf('The number of iterations required ');
+fprintf('to compute the root is: %g.\n', N);
+fprintf('The residual of the root is: %d.\n', res);
+%%
+% As you can see, the Regula Falsi method requires far fewer iterations
+% than are required by the Bisection Method, making it the more
+% computationally efficient algorithm.
+%% Part 5. Regula Falsi With Extremely Small Epsilon Values
+% If the stopping criterium value epsilon is a very small floating point
+% number near 1e-17, say 1e-15, then performing a subtraction operation
+% with this number will result in catastrophic cancellation and massive
+% loss of precision in the computed value. In the regulafalsi.m function
+% the stopping criterium is reached when the function value at the midpoint
+% c is less than epsilon. However in the last iteration of the function
+% where the function value at c is _almost_ less than epsilon, before f(c)
+% < epsilon is evaluated the function value at c must be computed. 
+% The waveguide function, however, squares c intermediately and subtracts
+% it from omega squared thus producing a number less than 1e-15. This 
+% produces a catastrophic cancellation error which skews the resulting 
+% approximation of the root. While this means that the waveguide function
+% cannot be implemented with double-precision floating point numbers less
+% than 1e-13, the result of the catastrophic cancellation may be emulated
+% by simply setting epsilon equal to one, as is shown below:
+epsilon = 1;
+
+a = 9.0;
+b = 10.0;
+[c, N, res] = regulafalsi(a, b, epsilon, omega);
+fprintf('\nFor omega = 8 and epsilon = 1e-15:\n');
+fprintf('The first root of the waveguide function is: %.15f.\n', c);
+fprintf('The number of iterations required ');
+fprintf('to compute the root is: %g.\n', N);
+fprintf('The residual of the root is: %d.\n', res);
+
+a = 11.0;
+b = 12.0;
+[c, N, res] = regulafalsi(a, b, epsilon, omega);
+fprintf('\nThe second root of the waveguide function is: %.15f.\n', c);
+fprintf('The number of iterations required ');
+fprintf('to compute the root is: %g.\n', N);
+fprintf('The residual of the root is: %d.\n', res);
+
+a = 13.0;
+b = 14.0;
+[c, N, res] = regulafalsi(a, b, epsilon, omega);
+fprintf('\nThe third root of the waveguide function is: %.15f.\n', c);
+fprintf('The number of iterations required ');
+fprintf('to compute the root is: %g.\n', N);
+fprintf('The residual of the root is: %d.\n', res);
+
+a = 14.0;
+b = 15.0;
+[c, N, res] = regulafalsi(a, b, epsilon, omega);
+fprintf('\nThe fourth root of the waveguide function is: %.15f.\n', c);
+fprintf('The number of iterations required ');
+fprintf('to compute the root is: %g.\n', N);
+fprintf('The residual of the root is: %d.\n', res);
+
+a = 14.95;
+b = 15.95;
+[c, N, res] = regulafalsi(a, b, epsilon, omega);
+fprintf('\nThe fifth root of the waveguide function is: %.15f.\n', c);
+fprintf('The number of iterations required ');
+fprintf('to compute the root is: %g.\n', N);
+fprintf('The residual of the root is: %d.\n', res);
+%%
+% As you can see, this produces a significantly larger residual on the root
+% than the previous computed values with epsilon equal to 1e-12, thus
+% approximating the results of catastrophic cancellation.
