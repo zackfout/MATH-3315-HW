@@ -14,11 +14,11 @@ function n = bisect_iterations(a, b, varargin)
   addOptional(p, 'eps', @isnumeric);
   parse(p, a, b, varargin{:}); % validate inputs
   
-  switch nargin
+  switch nargin % check the number of input arguments
       case 3
           n = ceil(log((p.Results.b - p.Results.a)/p.Results.eps)/log(2));
       case 2
-          n = ceil(log((p.Results.b - p.Results.a)/10^(-12))/log(2));
+          n = ceil(log((p.Results.b - p.Results.a)/power(10, -12))/log(2));
       otherwise
           error('bisect_iterations', 'Wrong number of inputs');
   end
