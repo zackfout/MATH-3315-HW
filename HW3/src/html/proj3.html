@@ -1,0 +1,810 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>proj3</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-04-07"><meta name="DC.source" content="proj3.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2"><b>MATH 3315 Project 3 - Interpolation - By Zack Fout</b></a></li><li><a href="#3">Part 1. Computing Interpolating Polynomials with Lagrange Polynomials</a></li><li><a href="#5">Part 2 the exponential function</a></li><li><a href="#8">Part 3. Interpolation of f(x) = 1/(1 + 25 *x^2)</a></li><li><a href="#11">Part 4. Interpolation of f(x) = 1/(1 + 25 *x^2) Over a Second Interval</a></li><li><a href="#14">Part 5. Interpolation of f(x) = 1/(1 + 25 *x^2) Continued</a></li></ul></div><pre class="codeinput"><span class="comment">%</span>
+<span class="comment">% Title: proj3.m</span>
+<span class="comment">% Summary: driver m-script for Project 3 for MATH 3315</span>
+<span class="comment">% Author: Zack Fout</span>
+<span class="comment">% Version: 1.1</span>
+<span class="comment">% Last Modified: 04/06/2014</span>
+<span class="comment">% Notes: Completed code for Part 1, need to add comments</span>
+<span class="comment">%</span>
+</pre><h2><b>MATH 3315 Project 3 - Interpolation - By Zack Fout</b><a name="2"></a></h2><h2>Part 1. Computing Interpolating Polynomials with Lagrange Polynomials<a name="3"></a></h2><p>Interpolation is a numerical method of constructing new data points within the range of a discrete set of known data points in order to approximate an analytic function. One such method of interpolation is the Lagrange approximation which approximates an analytic function with a sum of polynomials. An example of the Lagrange approximation may be seen below:</p><pre class="codeinput">xNodes = [0, 2, 3, 5, 6]; <span class="comment">% x values of given data points</span>
+fNodes = [1, 5, 0, -3, 2]; <span class="comment">% y values of given data points</span>
+x = linspace(0, 6, 500); <span class="comment">% range of the approximation</span>
+y = lagrange(x, xNodes, fNodes); <span class="comment">% determines the lagrange approximation</span>
+
+<span class="comment">% formatting</span>
+figure(<span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+    <span class="string">'Position'</span>, [100 100 600 600]);
+
+plot(x, y, <span class="keyword">...</span>
+  <span class="string">'LineStyle'</span>, <span class="string">'-'</span>, <span class="keyword">...</span>
+  <span class="string">'LineWidth'</span>, 2, <span class="keyword">...</span>
+  <span class="string">'Color'</span>, <span class="string">'r'</span>);
+
+hold <span class="string">on</span>;
+
+plot(xNodes, fNodes, <span class="string">'bo'</span>, <span class="keyword">...</span>
+  <span class="string">'LineWidth'</span>, 3, <span class="keyword">...</span>
+  <span class="string">'MarkerSize'</span>, 10, <span class="keyword">...</span>
+  <span class="string">'MarkerEdgeColor'</span>, <span class="string">'b'</span>, <span class="keyword">...</span>
+  <span class="string">'MarkerFaceColor'</span>, <span class="string">'y'</span>);
+
+hTitle = title(<span class="string">'The Lagrange Interpolating Polynomial'</span>);
+hXLabel = xlabel(<span class="string">'x Values from [0, 6]'</span>);
+hYLabel = ylabel(<span class="string">'Values of P(x)'</span>);
+hLegend = legend({<span class="string">'P(x) = {\Sigma}{y_k}{L_k(x)}'</span>, <span class="string">'Given Data'</span>}, <span class="keyword">...</span>
+    <span class="string">'Location'</span>, <span class="string">'northeast'</span>);
+
+set([hXLabel, hYLabel, hTitle, hLegend], <span class="keyword">...</span>
+    <span class="string">'FontName'</span>, <span class="string">'Courier 10 Pitch'</span>, <span class="keyword">...</span>
+    <span class="string">'FontSize'</span>, 14, <span class="keyword">...</span>
+    <span class="string">'FontWeight'</span>, <span class="string">'bold'</span>);
+
+set(gca, <span class="keyword">...</span>
+    <span class="string">'Box'</span>, <span class="string">'off'</span>, <span class="keyword">...</span>
+    <span class="string">'TickDir'</span>, <span class="string">'out'</span>, <span class="keyword">...</span>
+    <span class="string">'TickLength'</span>, [.02 .02], <span class="keyword">...</span>
+    <span class="string">'XMinorTick'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+    <span class="string">'YMinorTick'</span>, <span class="string">'on'</span>);
+</pre><img vspace="5" hspace="5" src="proj3_01.png" alt=""> <p>As you can see by visually inspecting the graph, the Lagrange appoximation estimates an analytic function that passes through the provided data points.</p><h2>Part 2 the exponential function<a name="5"></a></h2><p>Now, the Lagrange interpolation method will be used to approximate the function <img src="proj3_eq93659.png" alt="$$f(x) = e^{-x^2}$"> over the interval <img src="proj3_eq98524.png" alt="$$[-{\pi}, \pi]$"> using N+1 equally spaced data points. The approximations using N = 10, N = 20, and N = 30 data points are shown below:</p><pre class="codeinput">x = linspace(-pi, pi, 500);
+
+xNodes1 = linspace(-pi, pi, 11); <span class="comment">% x values of equally spaced nodes</span>
+<span class="keyword">for</span> k=1:11
+    fNodes1(k) = exp(-power(xNodes1(k), 2)); <span class="comment">% y values of nodes</span>
+<span class="keyword">end</span>
+lagrange1 = lagrange(x, xNodes1, fNodes1); <span class="comment">% compute lagrangre polynomial</span>
+
+xNodes2 = linspace(-pi, pi, 21); <span class="comment">% x values of equally spaced nodes</span>
+<span class="keyword">for</span> k=1:21
+    fNodes2(k) = exp(-power(xNodes2(k), 2)); <span class="comment">% y values of nodes</span>
+<span class="keyword">end</span>
+lagrange2 = lagrange(x, xNodes2, fNodes2); <span class="comment">% compute lagrangre polynomial</span>
+
+xNodes3 = linspace(-pi, pi, 31); <span class="comment">% x values of equally spaced nodes</span>
+<span class="keyword">for</span> k=1:31
+    fNodes3(k) = exp(-power(xNodes3(k), 2)); <span class="comment">% y values of nodes</span>
+<span class="keyword">end</span>
+lagrange3 = lagrange(x, xNodes3, fNodes3); <span class="comment">% compute lagrangre polynomial</span>
+
+<span class="comment">% formatting</span>
+figure(<span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+    <span class="string">'Position'</span>, [100 100 700 700]);
+
+hPlot1 = plot(x, lagrange1, x, lagrange2, x, lagrange3);
+set(hPlot1, <span class="keyword">...</span>
+  <span class="string">'LineStyle'</span>, <span class="string">'-'</span>, <span class="keyword">...</span>
+  <span class="string">'LineWidth'</span>, 2);
+ylim([-0.1, 1.1]);
+hold <span class="string">on</span>;
+
+hTitle1 = title(<span class="string">'The Lagrange Interpolating Polynomials of exp(-x^2)'</span>);
+hXLabel1 = xlabel(<span class="string">'x Values from [-{\pi}, \pi]'</span>);
+hYLabel1 = ylabel(<span class="string">' Values of P(x)'</span>);
+hLegend1 = legend(<span class="string">'N = 10'</span>, <span class="string">'N = 20'</span>, <span class="string">'N = 30'</span>, <span class="string">'Location'</span>, <span class="string">'best'</span>);
+
+set([hXLabel1, hYLabel1, hTitle1, hLegend1], <span class="keyword">...</span>
+    <span class="string">'FontName'</span>, <span class="string">'Courier 10 Pitch'</span>, <span class="keyword">...</span>
+    <span class="string">'FontSize'</span>, 14, <span class="keyword">...</span>
+    <span class="string">'FontWeight'</span>, <span class="string">'bold'</span>);
+
+set(gca, <span class="keyword">...</span>
+    <span class="string">'Box'</span>, <span class="string">'off'</span>, <span class="keyword">...</span>
+    <span class="string">'TickDir'</span>, <span class="string">'out'</span>, <span class="keyword">...</span>
+    <span class="string">'TickLength'</span>, [.02 .02], <span class="keyword">...</span>
+    <span class="string">'XMinorTick'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+    <span class="string">'YMinorTick'</span>, <span class="string">'on'</span>);
+</pre><img vspace="5" hspace="5" src="proj3_02.png" alt=""> <p>As you can see by visually inspecting the graph, the Lagrange polynomials become more accurate approximations of the analytic function <img src="proj3_eq93659.png" alt="$$f(x) = e^{-x^2}$"> with an increasing number of given data points. An examination of the absolute errors on the analytic function and each approximation yields further useful information about the approximation. The logarithmic plot of these errors over the given interval shown below describe the difference between the approximated values of the analytic function and the actual values:</p><pre class="codeinput"><span class="keyword">for</span> k=1:500
+    <span class="comment">% compute the absolute errors for each polynomial</span>
+    err1(k) = abs(exp(-power(x(k), 2)) - lagrange1(k));
+    err2(k) = abs(exp(-power(x(k), 2)) - lagrange2(k));
+    err3(k) = abs(exp(-power(x(k), 2)) - lagrange3(k));
+<span class="keyword">end</span>
+
+<span class="comment">% formatting</span>
+figure(<span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+    <span class="string">'Position'</span>, [100 100 700 700]);
+
+hSemilogy = semilogy(x, err1, x, err2, x, err3);
+set(hSemilogy, <span class="keyword">...</span>
+  <span class="string">'LineStyle'</span>, <span class="string">'-'</span>, <span class="keyword">...</span>
+  <span class="string">'LineWidth'</span>, 2);
+hold <span class="string">on</span>;
+
+hTitle2 = title(<span class="string">'The Interpolation Errors of the Lagrange Polynomials'</span>);
+hXLabel2 = xlabel(<span class="string">'x Values from [-{\pi}, \pi]'</span>);
+hYLabel2 = ylabel(<span class="string">'Values of E(x)'</span>);
+hLegend2 = legend(<span class="string">'N = 10'</span>, <span class="string">'N = 20'</span>, <span class="string">'N = 30'</span>, <span class="string">'Location'</span>, <span class="string">'best'</span>);
+
+set([hXLabel2, hYLabel2, hTitle2, hLegend2], <span class="keyword">...</span>
+    <span class="string">'FontName'</span>, <span class="string">'Courier 10 Pitch'</span>, <span class="keyword">...</span>
+    <span class="string">'FontSize'</span>, 14, <span class="keyword">...</span>
+    <span class="string">'FontWeight'</span>, <span class="string">'bold'</span>);
+
+set(gca, <span class="keyword">...</span>
+    <span class="string">'Box'</span>, <span class="string">'off'</span>, <span class="keyword">...</span>
+    <span class="string">'TickDir'</span>, <span class="string">'out'</span>, <span class="keyword">...</span>
+    <span class="string">'TickLength'</span>, [.02 .02], <span class="keyword">...</span>
+    <span class="string">'XMinorTick'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+    <span class="string">'YMinorTick'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+    <span class="string">'FontSize'</span>, 14);
+</pre><img vspace="5" hspace="5" src="proj3_03.png" alt=""> <p>The graph of these error functions illuminate two useful inferences. The first is that the approximations become more accurate toward the interior of the interval as is illustrated by the general trend of very small errors around x = 0 from both the left and right sides of the graph. The other inference is that approximations with a greater number of given data points result in smaller errors on the analytic function, as is illustrated by the  general trend down toward 10^-16 with each function with increasing N.</p><h2>Part 3. Interpolation of f(x) = 1/(1 + 25 *x^2)<a name="8"></a></h2><p>Now, the Lagrange interpolation method will be used to approximate the function <img src="proj3_eq20157.png" alt="$$f(x) = 1/(1 + 25 * x^2)$"> over the interval <img src="proj3_eq12537.png" alt="$$[-1, 1]$"> using N+1 equally spaced data points. The approximations using N = 10, N = 20, and N = 30 data points are shown below:</p><pre class="codeinput">x1 = linspace(-1, 1, 500);
+
+xNodes4 = linspace(-1, 1, 11); <span class="comment">% x values of equally spaced nodes</span>
+<span class="keyword">for</span> k=1:11
+    fNodes4(k) = 1 ./ (1 + (25 * power(xNodes4(k), 2))); <span class="comment">% y values of nodes</span>
+<span class="keyword">end</span>
+lagrange4 = lagrange(x1, xNodes4, fNodes4); <span class="comment">% compute lagrangre polynomial</span>
+
+xNodes5 = linspace(-1, 1, 21); <span class="comment">% x values of equally spaced nodes</span>
+<span class="keyword">for</span> k=1:21
+    fNodes5(k) = 1 ./ (1 + (25 * power(xNodes5(k), 2))); <span class="comment">% y values of nodes</span>
+<span class="keyword">end</span>
+lagrange5 = lagrange(x1, xNodes5, fNodes5); <span class="comment">% compute lagrangre polynomial</span>
+
+xNodes6 = linspace(-1, 1, 31); <span class="comment">% x values of equally spaced nodes</span>
+<span class="keyword">for</span> k=1:31
+    fNodes6(k) = 1 ./ (1 + (25 * power(xNodes6(k), 2))); <span class="comment">% y values of nodes</span>
+<span class="keyword">end</span>
+lagrange6 = lagrange(x1, xNodes6, fNodes6); <span class="comment">% compute lagrangre polynomial</span>
+
+<span class="comment">% formatting</span>
+figure(<span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+    <span class="string">'Position'</span>, [100 100 700 700]);
+
+hPlot2 = plot(x1, lagrange4, x1, lagrange5, x1, lagrange6);
+set(hPlot2, <span class="keyword">...</span>
+  <span class="string">'LineStyle'</span>, <span class="string">'-'</span>, <span class="keyword">...</span>
+  <span class="string">'LineWidth'</span>, 2);
+ylim([0.0, 1.2]);
+
+hTitle3 = title(<span class="string">'The Lagrange Interpolating Polynomials of f(x)'</span>);
+hXLabel3 = xlabel(<span class="string">'x Values from [-1, 1]'</span>);
+hYLabel3 = ylabel(<span class="string">' Values of P(x)'</span>);
+hLegend3 = legend(<span class="string">'N = 10'</span>, <span class="string">'N = 20'</span>, <span class="string">'N = 30'</span>, <span class="string">'Location'</span>, <span class="string">'south'</span>);
+
+set([hXLabel3, hYLabel3, hTitle3, hLegend3], <span class="keyword">...</span>
+    <span class="string">'FontName'</span>, <span class="string">'Courier 10 Pitch'</span>, <span class="keyword">...</span>
+    <span class="string">'FontSize'</span>, 14, <span class="keyword">...</span>
+    <span class="string">'FontWeight'</span>, <span class="string">'bold'</span>);
+
+set(gca, <span class="keyword">...</span>
+    <span class="string">'Box'</span>, <span class="string">'off'</span>, <span class="keyword">...</span>
+    <span class="string">'TickDir'</span>, <span class="string">'out'</span>, <span class="keyword">...</span>
+    <span class="string">'TickLength'</span>, [.02 .02], <span class="keyword">...</span>
+    <span class="string">'XMinorTick'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+    <span class="string">'YMinorTick'</span>, <span class="string">'on'</span>);
+</pre><img vspace="5" hspace="5" src="proj3_04.png" alt=""> <p>As you can see by visually inspecting the graph, the Lagrange polynomials become more accurate approximations of the analytic function <img src="proj3_eq96796.png" alt="$$f(x) = 1/(1 + 25 *x^2)$"> with an increasing number of given data points. Note that toward the center of the interval the approximations are good, while at the extremes of the interval the approximations are very poor. An examination of the absolute errors on the analytic function and each approximation yields further useful information about the approximation. The logarithmic plot of these errors over the given interval shown below describe the difference between the approximated values of the analytic function and the actual values:</p><pre class="codeinput"><span class="keyword">for</span> k=1:500
+    <span class="comment">% compute the absolute errors for each polynomial</span>
+    err4(k) = abs(1 ./ (1 + (25 * power(x1(k), 2))) - lagrange4(k));
+    err5(k) = abs(1 ./ (1 + (25 * power(x1(k), 2))) - lagrange5(k));
+    err6(k) = abs(1 ./ (1 + (25 * power(x1(k), 2))) - lagrange6(k));
+<span class="keyword">end</span>
+
+<span class="comment">% formatting</span>
+figure(<span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+    <span class="string">'Position'</span>, [100 100 700 700]);
+
+hSemilogy1 = semilogy(x1, err4, x1, err5, x1, err6);
+set(hSemilogy1, <span class="keyword">...</span>
+  <span class="string">'LineStyle'</span>, <span class="string">'-'</span>, <span class="keyword">...</span>
+  <span class="string">'LineWidth'</span>, 2);
+hold <span class="string">on</span>;
+
+hTitle4 = title(<span class="string">'The Interpolation Errors of the Lagrange Polynomials'</span>);
+hXLabel4 = xlabel(<span class="string">'x Values from [-1, 1]'</span>);
+hYLabel4 = ylabel(<span class="string">'Values of E(x)'</span>);
+hLegend4 = legend(<span class="string">'N = 10'</span>, <span class="string">'N = 20'</span>, <span class="string">'N = 30'</span>, <span class="string">'Location'</span>, <span class="string">'best'</span>);
+
+set([hXLabel4, hYLabel4, hTitle4, hLegend4], <span class="keyword">...</span>
+    <span class="string">'FontName'</span>, <span class="string">'Courier 10 Pitch'</span>, <span class="keyword">...</span>
+    <span class="string">'FontSize'</span>, 14, <span class="keyword">...</span>
+    <span class="string">'FontWeight'</span>, <span class="string">'bold'</span>);
+
+set(gca, <span class="keyword">...</span>
+    <span class="string">'Box'</span>, <span class="string">'off'</span>, <span class="keyword">...</span>
+    <span class="string">'TickDir'</span>, <span class="string">'out'</span>, <span class="keyword">...</span>
+    <span class="string">'TickLength'</span>, [.02 .02], <span class="keyword">...</span>
+    <span class="string">'XMinorTick'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+    <span class="string">'YMinorTick'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+    <span class="string">'FontSize'</span>, 14);
+</pre><img vspace="5" hspace="5" src="proj3_05.png" alt=""> <p>The graph of these error functions show that the errors of the approximations are clustered closer together for <img src="proj3_eq96796.png" alt="$$f(x) = 1/(1 + 25 *x^2)$"> than they are for <img src="proj3_eq93659.png" alt="$$f(x) = e^{-x^2}$">. However, the errors on <img src="proj3_eq96796.png" alt="$$f(x) = 1/(1 + 25 *x^2)$"> are no smaller than 10^-8 whereas the errors on <img src="proj3_eq93659.png" alt="$$f(x) = e^{-x^2}$"> are no smaller than 10^-16. Therefore, these approximations of <img src="proj3_eq96796.png" alt="$$f(x) = 1/(1 + 25 *x^2)$"> are significantly less accurate than the approximations of <img src="proj3_eq93659.png" alt="$$f(x) = e^{-x^2}$">, which could result in nontrivial errors in floating point operations.</p><h2>Part 4. Interpolation of f(x) = 1/(1 + 25 *x^2) Over a Second Interval<a name="11"></a></h2><p>Now, the Lagrange interpolation method will be used to approximate the function <img src="proj3_eq20157.png" alt="$$f(x) = 1/(1 + 25 * x^2)$"> over the interval <img src="proj3_eq91853.png" alt="$$[cos(0), cos(\pi)]$"> using N+1 equally spaced data points. The approximations using N = 10, N = 20, and N = 30 data points are shown below:</p><pre class="codeinput">x2 = cos(linspace(0, pi, 500));
+
+xNodes7 = cos(linspace(0, pi, 11)); <span class="comment">% x values of equally spaced nodes</span>
+<span class="keyword">for</span> k=1:11
+    fNodes7(k) = 1 ./ (1 + (25 * power(xNodes7(k), 2))); <span class="comment">% y values of nodes</span>
+<span class="keyword">end</span>
+lagrange7 = lagrange(x2, xNodes7, fNodes7); <span class="comment">% compute lagrangre polynomial</span>
+
+xNodes8 = cos(linspace(0, pi, 21)); <span class="comment">% x values of equally spaced nodes</span>
+<span class="keyword">for</span> k=1:21
+    fNodes8(k) = 1 ./ (1 + (25 * power(xNodes8(k), 2))); <span class="comment">% y values of nodes</span>
+<span class="keyword">end</span>
+lagrange8 = lagrange(x2, xNodes8, fNodes8); <span class="comment">% compute lagrangre polynomial</span>
+
+xNodes9 = cos(linspace(0, pi, 31)); <span class="comment">% x values of equally spaced nodes</span>
+<span class="keyword">for</span> k=1:31
+    fNodes9(k) = 1 ./ (1 + (25 * power(xNodes9(k), 2))); <span class="comment">% y values of nodes</span>
+<span class="keyword">end</span>
+lagrange9 = lagrange(x2, xNodes9, fNodes9); <span class="comment">% compute lagrangre polynomial</span>
+<span class="comment">% formatting</span>
+figure(<span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+    <span class="string">'Position'</span>, [100 100 700 700]);
+
+hPlot3 = plot(x2, lagrange7, x2, lagrange8, x2, lagrange9);
+set(hPlot3, <span class="keyword">...</span>
+  <span class="string">'LineStyle'</span>, <span class="string">'-'</span>, <span class="keyword">...</span>
+  <span class="string">'LineWidth'</span>, 2);
+ylim([0.0, 1.1]);
+
+hTitle5 = title(<span class="string">'The Lagrange Interpolating Polynomials of f(x)'</span>);
+hXLabel5 = xlabel(<span class="string">'x Values from [cos(0), cos(\pi)]'</span>);
+hYLabel5 = ylabel(<span class="string">' Values of P(x)'</span>);
+hLegend5 = legend(<span class="string">'N = 10'</span>, <span class="string">'N = 20'</span>, <span class="string">'N = 30'</span>, <span class="string">'Location'</span>, <span class="string">'south'</span>);
+
+set([hXLabel5, hYLabel5, hTitle5, hLegend5], <span class="keyword">...</span>
+    <span class="string">'FontName'</span>, <span class="string">'Courier 10 Pitch'</span>, <span class="keyword">...</span>
+    <span class="string">'FontSize'</span>, 14, <span class="keyword">...</span>
+    <span class="string">'FontWeight'</span>, <span class="string">'bold'</span>);
+
+set(gca, <span class="keyword">...</span>
+    <span class="string">'Box'</span>, <span class="string">'off'</span>, <span class="keyword">...</span>
+    <span class="string">'TickDir'</span>, <span class="string">'out'</span>, <span class="keyword">...</span>
+    <span class="string">'TickLength'</span>, [.02 .02], <span class="keyword">...</span>
+    <span class="string">'XMinorTick'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+    <span class="string">'YMinorTick'</span>, <span class="string">'on'</span>);
+</pre><img vspace="5" hspace="5" src="proj3_06.png" alt=""> <p>As you can see by visually inspecting the graph, the Lagrange polynomials become more accurate approximations of the analytic function <img src="proj3_eq96796.png" alt="$$f(x) = 1/(1 + 25 *x^2)$"> with an increasing number of given data points. Note that toward the center of the interval the approximations are good, while at the extremes of the interval the approximations are very poor. An examination of the absolute errors on the analytic function and each approximation yields further useful information about the approximation. The logarithmic plot of these errors over the given interval shown below describe the difference between the approximated values of the analytic function and the actual values:</p><pre class="codeinput"><span class="keyword">for</span> k=1:500
+    <span class="comment">% compute the absolute errors for each polynomial</span>
+    err7(k) = abs(1 ./ (1 + (25 * power(x1(k), 2))) - lagrange7(k));
+    err8(k) = abs(1 ./ (1 + (25 * power(x1(k), 2))) - lagrange8(k));
+    err9(k) = abs(1 ./ (1 + (25 * power(x1(k), 2))) - lagrange9(k));
+<span class="keyword">end</span>
+
+<span class="comment">% formatting</span>
+figure(<span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+    <span class="string">'Position'</span>, [100 100 700 700]);
+
+hSemilogy2 = semilogy(x2, err7, x2, err8, x2, err9);
+set(hSemilogy2, <span class="keyword">...</span>
+  <span class="string">'LineStyle'</span>, <span class="string">'-'</span>, <span class="keyword">...</span>
+  <span class="string">'LineWidth'</span>, 2);
+hold <span class="string">on</span>;
+
+hTitle5 = title(<span class="string">'The Interpolation Errors of the Lagrange Polynomials'</span>);
+hXLabel5 = xlabel(<span class="string">'x Values from [cos(0), cos(\pi)]'</span>);
+hYLabel5 = ylabel(<span class="string">'Values of E(x)'</span>);
+hLegend5 = legend(<span class="string">'N = 10'</span>, <span class="string">'N = 20'</span>, <span class="string">'N = 30'</span>, <span class="string">'Location'</span>, <span class="string">'best'</span>);
+
+set([hXLabel5, hYLabel5, hTitle5, hLegend5], <span class="keyword">...</span>
+    <span class="string">'FontName'</span>, <span class="string">'Courier 10 Pitch'</span>, <span class="keyword">...</span>
+    <span class="string">'FontSize'</span>, 14, <span class="keyword">...</span>
+    <span class="string">'FontWeight'</span>, <span class="string">'bold'</span>);
+
+set(gca, <span class="keyword">...</span>
+    <span class="string">'Box'</span>, <span class="string">'off'</span>, <span class="keyword">...</span>
+    <span class="string">'TickDir'</span>, <span class="string">'out'</span>, <span class="keyword">...</span>
+    <span class="string">'TickLength'</span>, [.02 .02], <span class="keyword">...</span>
+    <span class="string">'XMinorTick'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+    <span class="string">'YMinorTick'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+    <span class="string">'FontSize'</span>, 14);
+</pre><img vspace="5" hspace="5" src="proj3_07.png" alt=""> <p>The graph of these error functions show that the errors of the approximations are clustered closer together for <img src="proj3_eq96796.png" alt="$$f(x) = 1/(1 + 25 *x^2)$"> than they are for <img src="proj3_eq93659.png" alt="$$f(x) = e^{-x^2}$">. However, the errors on <img src="proj3_eq96796.png" alt="$$f(x) = 1/(1 + 25 *x^2)$">  over [-1, 1] are no smaller than 10^-6 whereas the errors on <img src="proj3_eq93659.png" alt="$$f(x) = e^{-x^2}$"> are no smaller than 10^-8. over [cos(0), cos(\pi)]. Therefore, these approximations of <img src="proj3_eq96796.png" alt="$$f(x) = 1/(1 + 25 *x^2)$"> are significantly less accurate than the previous approximations of <img src="proj3_eq93659.png" alt="$$f(x) = e^{-x^2}$">, which could result in even more nontrivial errors in floating point operations.</p><h2>Part 5. Interpolation of f(x) = 1/(1 + 25 *x^2) Continued<a name="14"></a></h2><p>Here, we will plot the aproximation of f(x) = 1/(1 + 25 *x^2) over the interval [cos(0), cos(\pi)] with the Lagrange polynomial where N = 30 and the given data points. The results are shown below:</p><pre class="codeinput">figure(<span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+    <span class="string">'Position'</span>, [100 100 700 700]);
+
+hPlot4 = plot(x2, lagrange9);
+set(hPlot4, <span class="keyword">...</span>
+  <span class="string">'LineStyle'</span>, <span class="string">'-'</span>, <span class="keyword">...</span>
+  <span class="string">'LineWidth'</span>, 2, <span class="keyword">...</span>
+  <span class="string">'Color'</span>, <span class="string">'r'</span>);
+ylim([0.0, 1.1]);
+
+hold <span class="string">on</span>;
+
+plot(xNodes9, fNodes9, <span class="string">'bo'</span>, <span class="keyword">...</span>
+  <span class="string">'LineWidth'</span>, 3, <span class="keyword">...</span>
+  <span class="string">'MarkerSize'</span>, 10, <span class="keyword">...</span>
+  <span class="string">'MarkerEdgeColor'</span>, <span class="string">'b'</span>, <span class="keyword">...</span>
+  <span class="string">'MarkerFaceColor'</span>, <span class="string">'y'</span>);
+
+hTitle6 = title(<span class="string">'The Lagrange Interpolating Polynomials of f(x)'</span>);
+hXLabel6 = xlabel(<span class="string">'x Values from [cos(0), cos(\pi)]'</span>);
+hYLabel6 = ylabel(<span class="string">' Values of P(x)'</span>);
+hLegend6 = legend(<span class="string">'N = 30'</span>, <span class="string">'Location'</span>, <span class="string">'south'</span>);
+
+set([hXLabel6, hYLabel6, hTitle6, hLegend6], <span class="keyword">...</span>
+    <span class="string">'FontName'</span>, <span class="string">'Courier 10 Pitch'</span>, <span class="keyword">...</span>
+    <span class="string">'FontSize'</span>, 14, <span class="keyword">...</span>
+    <span class="string">'FontWeight'</span>, <span class="string">'bold'</span>);
+
+set(gca, <span class="keyword">...</span>
+    <span class="string">'Box'</span>, <span class="string">'off'</span>, <span class="keyword">...</span>
+    <span class="string">'TickDir'</span>, <span class="string">'out'</span>, <span class="keyword">...</span>
+    <span class="string">'TickLength'</span>, [.02 .02], <span class="keyword">...</span>
+    <span class="string">'XMinorTick'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+    <span class="string">'YMinorTick'</span>, <span class="string">'on'</span>);
+</pre><img vspace="5" hspace="5" src="proj3_08.png" alt=""> <p>Here you can see that the majority of the nodes are clustered toward the extremes of the interval, while toward the center of the interval the nodes are sparsely populated.</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%
+% Title: proj3.m
+% Summary: driver m-script for Project 3 for MATH 3315
+% Author: Zack Fout
+% Version: 1.1
+% Last Modified: 04/06/2014
+% Notes: Completed code for Part 1, need to add comments
+%
+%% *MATH 3315 Project 3 - Interpolation - By Zack Fout*
+%% Part 1. Computing Interpolating Polynomials with Lagrange Polynomials
+% Interpolation is a numerical method of constructing new data points 
+% within the range of a discrete set of known data points in order to
+% approximate an analytic function. One such method of interpolation is the
+% Lagrange approximation which approximates an analytic function with a sum
+% of polynomials. An example of the Lagrange approximation may be seen
+% below:
+xNodes = [0, 2, 3, 5, 6]; % x values of given data points
+fNodes = [1, 5, 0, -3, 2]; % y values of given data points
+x = linspace(0, 6, 500); % range of the approximation
+y = lagrange(x, xNodes, fNodes); % determines the lagrange approximation
+
+% formatting
+figure('Units', 'pixels', ...
+    'Position', [100 100 600 600]);
+
+plot(x, y, ...
+  'LineStyle', '-', ...
+  'LineWidth', 2, ...
+  'Color', 'r');
+
+hold on;
+
+plot(xNodes, fNodes, 'bo', ...
+  'LineWidth', 3, ...
+  'MarkerSize', 10, ...
+  'MarkerEdgeColor', 'b', ...
+  'MarkerFaceColor', 'y');
+
+hTitle = title('The Lagrange Interpolating Polynomial');
+hXLabel = xlabel('x Values from [0, 6]');
+hYLabel = ylabel('Values of P(x)');
+hLegend = legend({'P(x) = {\Sigma}{y_k}{L_k(x)}', 'Given Data'}, ...
+    'Location', 'northeast');
+
+set([hXLabel, hYLabel, hTitle, hLegend], ...
+    'FontName', 'Courier 10 Pitch', ...
+    'FontSize', 14, ...
+    'FontWeight', 'bold');
+
+set(gca, ...
+    'Box', 'off', ...
+    'TickDir', 'out', ...
+    'TickLength', [.02 .02], ...
+    'XMinorTick', 'on', ...
+    'YMinorTick', 'on');
+%%
+% As you can see by visually inspecting the graph, the Lagrange
+% appoximation estimates an analytic function that passes through the
+% provided data points.
+%% Part 2 the exponential function
+% Now, the Lagrange interpolation method will be used to approximate the
+% function $$f(x) = e^{-x^2}$ over the interval $$[-{\pi}, \pi]$ using N+1
+% equally spaced data points. The approximations using N = 10, N = 20, and
+% N = 30 data points are shown below:
+x = linspace(-pi, pi, 500);
+
+xNodes1 = linspace(-pi, pi, 11); % x values of equally spaced nodes
+for k=1:11
+    fNodes1(k) = exp(-power(xNodes1(k), 2)); % y values of nodes
+end
+lagrange1 = lagrange(x, xNodes1, fNodes1); % compute lagrangre polynomial
+
+xNodes2 = linspace(-pi, pi, 21); % x values of equally spaced nodes
+for k=1:21
+    fNodes2(k) = exp(-power(xNodes2(k), 2)); % y values of nodes
+end
+lagrange2 = lagrange(x, xNodes2, fNodes2); % compute lagrangre polynomial
+
+xNodes3 = linspace(-pi, pi, 31); % x values of equally spaced nodes
+for k=1:31
+    fNodes3(k) = exp(-power(xNodes3(k), 2)); % y values of nodes
+end
+lagrange3 = lagrange(x, xNodes3, fNodes3); % compute lagrangre polynomial
+
+% formatting
+figure('Units', 'pixels', ...
+    'Position', [100 100 700 700]);
+
+hPlot1 = plot(x, lagrange1, x, lagrange2, x, lagrange3);
+set(hPlot1, ...
+  'LineStyle', '-', ...
+  'LineWidth', 2);
+ylim([-0.1, 1.1]);
+hold on;
+
+hTitle1 = title('The Lagrange Interpolating Polynomials of exp(-x^2)');
+hXLabel1 = xlabel('x Values from [-{\pi}, \pi]');
+hYLabel1 = ylabel(' Values of P(x)');
+hLegend1 = legend('N = 10', 'N = 20', 'N = 30', 'Location', 'best');
+
+set([hXLabel1, hYLabel1, hTitle1, hLegend1], ...
+    'FontName', 'Courier 10 Pitch', ...
+    'FontSize', 14, ...
+    'FontWeight', 'bold');
+
+set(gca, ...
+    'Box', 'off', ...
+    'TickDir', 'out', ...
+    'TickLength', [.02 .02], ...
+    'XMinorTick', 'on', ...
+    'YMinorTick', 'on');
+%%
+% As you can see by visually inspecting the graph, the Lagrange polynomials
+% become more accurate approximations of the analytic function 
+% $$f(x) = e^{-x^2}$ with an increasing number of given data points. An
+% examination of the absolute errors on the analytic function and each
+% approximation yields further useful information about the approximation.
+% The logarithmic plot of these errors over the given interval shown below
+% describe the difference between the approximated values of the analytic
+% function and the actual values:
+
+for k=1:500
+    % compute the absolute errors for each polynomial
+    err1(k) = abs(exp(-power(x(k), 2)) - lagrange1(k));
+    err2(k) = abs(exp(-power(x(k), 2)) - lagrange2(k));
+    err3(k) = abs(exp(-power(x(k), 2)) - lagrange3(k));
+end
+
+% formatting
+figure('Units', 'pixels', ...
+    'Position', [100 100 700 700]);
+
+hSemilogy = semilogy(x, err1, x, err2, x, err3);
+set(hSemilogy, ...
+  'LineStyle', '-', ...
+  'LineWidth', 2);
+hold on;
+
+hTitle2 = title('The Interpolation Errors of the Lagrange Polynomials');
+hXLabel2 = xlabel('x Values from [-{\pi}, \pi]');
+hYLabel2 = ylabel('Values of E(x)');
+hLegend2 = legend('N = 10', 'N = 20', 'N = 30', 'Location', 'best');
+
+set([hXLabel2, hYLabel2, hTitle2, hLegend2], ...
+    'FontName', 'Courier 10 Pitch', ...
+    'FontSize', 14, ...
+    'FontWeight', 'bold');
+
+set(gca, ...
+    'Box', 'off', ...
+    'TickDir', 'out', ...
+    'TickLength', [.02 .02], ...
+    'XMinorTick', 'on', ...
+    'YMinorTick', 'on', ...
+    'FontSize', 14);
+%%
+% The graph of these error functions illuminate two useful inferences. The
+% first is that the approximations become more accurate toward the interior
+% of the interval as is illustrated by the general trend of very small
+% errors around x = 0 from both the left and right sides of the graph. The
+% other inference is that approximations with a greater number of given
+% data points result in smaller errors on the analytic function, as is
+% illustrated by the  general trend down toward 10^-16 with each function
+% with increasing N.
+%% Part 3. Interpolation of f(x) = 1/(1 + 25 *x^2)
+% Now, the Lagrange interpolation method will be used to approximate the
+% function $$f(x) = 1/(1 + 25 * x^2)$ over the interval $$[-1, 1]$ using N+1
+% equally spaced data points. The approximations using N = 10, N = 20, and
+% N = 30 data points are shown below:
+x1 = linspace(-1, 1, 500);
+
+xNodes4 = linspace(-1, 1, 11); % x values of equally spaced nodes
+for k=1:11
+    fNodes4(k) = 1 ./ (1 + (25 * power(xNodes4(k), 2))); % y values of nodes
+end
+lagrange4 = lagrange(x1, xNodes4, fNodes4); % compute lagrangre polynomial
+
+xNodes5 = linspace(-1, 1, 21); % x values of equally spaced nodes
+for k=1:21
+    fNodes5(k) = 1 ./ (1 + (25 * power(xNodes5(k), 2))); % y values of nodes
+end
+lagrange5 = lagrange(x1, xNodes5, fNodes5); % compute lagrangre polynomial
+
+xNodes6 = linspace(-1, 1, 31); % x values of equally spaced nodes
+for k=1:31
+    fNodes6(k) = 1 ./ (1 + (25 * power(xNodes6(k), 2))); % y values of nodes
+end
+lagrange6 = lagrange(x1, xNodes6, fNodes6); % compute lagrangre polynomial
+
+% formatting
+figure('Units', 'pixels', ...
+    'Position', [100 100 700 700]);
+
+hPlot2 = plot(x1, lagrange4, x1, lagrange5, x1, lagrange6);
+set(hPlot2, ...
+  'LineStyle', '-', ...
+  'LineWidth', 2);
+ylim([0.0, 1.2]);
+
+hTitle3 = title('The Lagrange Interpolating Polynomials of f(x)');
+hXLabel3 = xlabel('x Values from [-1, 1]');
+hYLabel3 = ylabel(' Values of P(x)');
+hLegend3 = legend('N = 10', 'N = 20', 'N = 30', 'Location', 'south');
+
+set([hXLabel3, hYLabel3, hTitle3, hLegend3], ...
+    'FontName', 'Courier 10 Pitch', ...
+    'FontSize', 14, ...
+    'FontWeight', 'bold');
+
+set(gca, ...
+    'Box', 'off', ...
+    'TickDir', 'out', ...
+    'TickLength', [.02 .02], ...
+    'XMinorTick', 'on', ...
+    'YMinorTick', 'on');
+%%
+% As you can see by visually inspecting the graph, the Lagrange polynomials
+% become more accurate approximations of the analytic function 
+% $$f(x) = 1/(1 + 25 *x^2)$ with an increasing number of given data points.
+% Note that toward the center of the interval the approximations are good,
+% while at the extremes of the interval the approximations are very poor.
+% An examination of the absolute errors on the analytic function and each
+% approximation yields further useful information about the approximation.
+% The logarithmic plot of these errors over the given interval shown below
+% describe the difference between the approximated values of the analytic
+% function and the actual values:
+for k=1:500
+    % compute the absolute errors for each polynomial
+    err4(k) = abs(1 ./ (1 + (25 * power(x1(k), 2))) - lagrange4(k));
+    err5(k) = abs(1 ./ (1 + (25 * power(x1(k), 2))) - lagrange5(k));
+    err6(k) = abs(1 ./ (1 + (25 * power(x1(k), 2))) - lagrange6(k));
+end
+
+% formatting
+figure('Units', 'pixels', ...
+    'Position', [100 100 700 700]);
+
+hSemilogy1 = semilogy(x1, err4, x1, err5, x1, err6);
+set(hSemilogy1, ...
+  'LineStyle', '-', ...
+  'LineWidth', 2);
+hold on;
+
+hTitle4 = title('The Interpolation Errors of the Lagrange Polynomials');
+hXLabel4 = xlabel('x Values from [-1, 1]');
+hYLabel4 = ylabel('Values of E(x)');
+hLegend4 = legend('N = 10', 'N = 20', 'N = 30', 'Location', 'best');
+
+set([hXLabel4, hYLabel4, hTitle4, hLegend4], ...
+    'FontName', 'Courier 10 Pitch', ...
+    'FontSize', 14, ...
+    'FontWeight', 'bold');
+
+set(gca, ...
+    'Box', 'off', ...
+    'TickDir', 'out', ...
+    'TickLength', [.02 .02], ...
+    'XMinorTick', 'on', ...
+    'YMinorTick', 'on', ...
+    'FontSize', 14);
+%%
+% The graph of these error functions show that the errors of the 
+% approximations are clustered closer together for
+% $$f(x) = 1/(1 + 25 *x^2)$ than they are for $$f(x) = e^{-x^2}$. However,
+% the errors on $$f(x) = 1/(1 + 25 *x^2)$ are no smaller than 10^-8 whereas
+% the errors on $$f(x) = e^{-x^2}$ are no smaller than 10^-16. Therefore,
+% these approximations of $$f(x) = 1/(1 + 25 *x^2)$ are significantly less
+% accurate than the approximations of $$f(x) = e^{-x^2}$, which could
+% result in nontrivial errors in floating point operations.
+%% Part 4. Interpolation of f(x) = 1/(1 + 25 *x^2) Over a Second Interval
+% Now, the Lagrange interpolation method will be used to approximate the
+% function $$f(x) = 1/(1 + 25 * x^2)$ over the interval 
+% $$[cos(0), cos(\pi)]$ using N+1 equally spaced data points. The 
+% approximations using N = 10, N = 20, and N = 30 data points are
+% shown below:
+x2 = cos(linspace(0, pi, 500));
+
+xNodes7 = cos(linspace(0, pi, 11)); % x values of equally spaced nodes
+for k=1:11
+    fNodes7(k) = 1 ./ (1 + (25 * power(xNodes7(k), 2))); % y values of nodes
+end
+lagrange7 = lagrange(x2, xNodes7, fNodes7); % compute lagrangre polynomial
+
+xNodes8 = cos(linspace(0, pi, 21)); % x values of equally spaced nodes
+for k=1:21
+    fNodes8(k) = 1 ./ (1 + (25 * power(xNodes8(k), 2))); % y values of nodes
+end
+lagrange8 = lagrange(x2, xNodes8, fNodes8); % compute lagrangre polynomial
+
+xNodes9 = cos(linspace(0, pi, 31)); % x values of equally spaced nodes
+for k=1:31
+    fNodes9(k) = 1 ./ (1 + (25 * power(xNodes9(k), 2))); % y values of nodes
+end
+lagrange9 = lagrange(x2, xNodes9, fNodes9); % compute lagrangre polynomial
+% formatting
+figure('Units', 'pixels', ...
+    'Position', [100 100 700 700]);
+
+hPlot3 = plot(x2, lagrange7, x2, lagrange8, x2, lagrange9);
+set(hPlot3, ...
+  'LineStyle', '-', ...
+  'LineWidth', 2);
+ylim([0.0, 1.1]);
+
+hTitle5 = title('The Lagrange Interpolating Polynomials of f(x)');
+hXLabel5 = xlabel('x Values from [cos(0), cos(\pi)]');
+hYLabel5 = ylabel(' Values of P(x)');
+hLegend5 = legend('N = 10', 'N = 20', 'N = 30', 'Location', 'south');
+
+set([hXLabel5, hYLabel5, hTitle5, hLegend5], ...
+    'FontName', 'Courier 10 Pitch', ...
+    'FontSize', 14, ...
+    'FontWeight', 'bold');
+
+set(gca, ...
+    'Box', 'off', ...
+    'TickDir', 'out', ...
+    'TickLength', [.02 .02], ...
+    'XMinorTick', 'on', ...
+    'YMinorTick', 'on');
+%%
+% As you can see by visually inspecting the graph, the Lagrange polynomials
+% become more accurate approximations of the analytic function 
+% $$f(x) = 1/(1 + 25 *x^2)$ with an increasing number of given data points.
+% Note that toward the center of the interval the approximations are good,
+% while at the extremes of the interval the approximations are very poor.
+% An examination of the absolute errors on the analytic function and each
+% approximation yields further useful information about the approximation.
+% The logarithmic plot of these errors over the given interval shown below
+% describe the difference between the approximated values of the analytic
+% function and the actual values:
+for k=1:500
+    % compute the absolute errors for each polynomial
+    err7(k) = abs(1 ./ (1 + (25 * power(x1(k), 2))) - lagrange7(k));
+    err8(k) = abs(1 ./ (1 + (25 * power(x1(k), 2))) - lagrange8(k));
+    err9(k) = abs(1 ./ (1 + (25 * power(x1(k), 2))) - lagrange9(k));
+end
+
+% formatting
+figure('Units', 'pixels', ...
+    'Position', [100 100 700 700]);
+
+hSemilogy2 = semilogy(x2, err7, x2, err8, x2, err9);
+set(hSemilogy2, ...
+  'LineStyle', '-', ...
+  'LineWidth', 2);
+hold on;
+
+hTitle5 = title('The Interpolation Errors of the Lagrange Polynomials');
+hXLabel5 = xlabel('x Values from [cos(0), cos(\pi)]');
+hYLabel5 = ylabel('Values of E(x)');
+hLegend5 = legend('N = 10', 'N = 20', 'N = 30', 'Location', 'best');
+
+set([hXLabel5, hYLabel5, hTitle5, hLegend5], ...
+    'FontName', 'Courier 10 Pitch', ...
+    'FontSize', 14, ...
+    'FontWeight', 'bold');
+
+set(gca, ...
+    'Box', 'off', ...
+    'TickDir', 'out', ...
+    'TickLength', [.02 .02], ...
+    'XMinorTick', 'on', ...
+    'YMinorTick', 'on', ...
+    'FontSize', 14);
+%%
+% The graph of these error functions show that the errors of the 
+% approximations are clustered closer together for
+% $$f(x) = 1/(1 + 25 *x^2)$ than they are for $$f(x) = e^{-x^2}$. However,
+% the errors on $$f(x) = 1/(1 + 25 *x^2)$  over [-1, 1] are no smaller than
+% 10^-6 whereas the errors on $$f(x) = e^{-x^2}$ are no smaller than 10^-8.
+% over [cos(0), cos(\pi)]. Therefore, these approximations of
+% $$f(x) = 1/(1 + 25 *x^2)$ are significantly less accurate than the
+% previous approximations of $$f(x) = e^{-x^2}$, which could
+% result in even more nontrivial errors in floating point operations.
+%% Part 5. Interpolation of f(x) = 1/(1 + 25 *x^2) Continued
+% Here, we will plot the aproximation of f(x) = 1/(1 + 25 *x^2) over the
+% interval [cos(0), cos(\pi)] with the Lagrange polynomial where N = 30 and
+% the given data points. The results are shown below:
+figure('Units', 'pixels', ...
+    'Position', [100 100 700 700]);
+
+hPlot4 = plot(x2, lagrange9);
+set(hPlot4, ...
+  'LineStyle', '-', ...
+  'LineWidth', 2, ...
+  'Color', 'r');
+ylim([0.0, 1.1]);
+
+hold on;
+
+plot(xNodes9, fNodes9, 'bo', ...
+  'LineWidth', 3, ...
+  'MarkerSize', 10, ...
+  'MarkerEdgeColor', 'b', ...
+  'MarkerFaceColor', 'y');
+
+hTitle6 = title('The Lagrange Interpolating Polynomials of f(x)');
+hXLabel6 = xlabel('x Values from [cos(0), cos(\pi)]');
+hYLabel6 = ylabel(' Values of P(x)');
+hLegend6 = legend('N = 30', 'Location', 'south');
+
+set([hXLabel6, hYLabel6, hTitle6, hLegend6], ...
+    'FontName', 'Courier 10 Pitch', ...
+    'FontSize', 14, ...
+    'FontWeight', 'bold');
+
+set(gca, ...
+    'Box', 'off', ...
+    'TickDir', 'out', ...
+    'TickLength', [.02 .02], ...
+    'XMinorTick', 'on', ...
+    'YMinorTick', 'on');
+%%
+% Here you can see that the majority of the nodes are clustered toward the
+% extremes of the interval, while toward the center of the interval the
+% nodes are sparsely populated.
+##### SOURCE END #####
+--></body></html>
