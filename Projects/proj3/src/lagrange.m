@@ -11,7 +11,6 @@
 %   fNodes  the y-values of the data points
 %   p       the function value of the interpolating polynomial at x
 %
-
 function p = lagrange(x, xNodes, fNodes)
   x_size = length(x); % length of the evaluation points
   degree = length(xNodes); % degree of the interpolating polynomial
