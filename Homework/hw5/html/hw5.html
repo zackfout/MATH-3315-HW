@@ -1,0 +1,252 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>hw5</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-04-14"><meta name="DC.source" content="hw5.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2"><b>MATH 3315 Homework 5 #3 By Zack Fout</b></a></li></ul></div><pre class="codeinput"><span class="comment">%</span>
+<span class="comment">% Title: hw5.m</span>
+<span class="comment">% Summary: driver m-script for Homework 3 for MATH 3315</span>
+<span class="comment">% Author: Zack Fout</span>
+<span class="comment">% Version: 1.1</span>
+<span class="comment">% Last Modified: 04/13/2015</span>
+<span class="comment">% Notes: finished problem 3</span>
+<span class="comment">%</span>
+</pre><h2><b>MATH 3315 Homework 5 #3 By Zack Fout</b><a name="2"></a></h2><pre class="codeinput">tNodes1 = [87.99 224.70 365.26 686.98]; <span class="comment">% orbital period values</span>
+dNodes1 = [57.59 108.11 149.57 227.84]; <span class="comment">% distance values</span>
+x1 = linspace(0, 300, 500);
+<span class="comment">% find the best fit function for the first 4 planets</span>
+y1 = orbital_fit(x1, tNodes1, dNodes1);
+
+<span class="comment">% formatting</span>
+figure(<span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+    <span class="string">'Position'</span>, [100 100 700 600]);
+plot(x1, y1, <span class="keyword">...</span>
+  <span class="string">'LineStyle'</span>, <span class="string">'-'</span>, <span class="keyword">...</span>
+  <span class="string">'LineWidth'</span>, 2, <span class="keyword">...</span>
+  <span class="string">'Color'</span>, <span class="string">'b'</span>);
+ylim([0, 800]);
+
+hold <span class="string">on</span>;
+
+plot(dNodes1, tNodes1, <span class="string">'o'</span>, <span class="keyword">...</span>
+  <span class="string">'LineWidth'</span>, 3, <span class="keyword">...</span>
+  <span class="string">'MarkerSize'</span>, 10, <span class="keyword">...</span>
+  <span class="string">'MarkerEdgeColor'</span>, <span class="string">'r'</span>, <span class="keyword">...</span>
+  <span class="string">'MarkerFaceColor'</span>, <span class="string">'y'</span>);
+
+hTitle1 = title(<span class="string">'The Least Squares Fit For Keplers Third Law of Motion'</span>);
+hXLabel1 = xlabel(<span class="string">'Distance (km x 10^6)'</span>);
+hYLabel1 = ylabel(<span class="string">'Sidereal Period (days)'</span>);
+hLegend1 = legend({<span class="string">'T = 0.1998x^{3/2}'</span>, <span class="string">'First 4 Planets'</span>}, <span class="keyword">...</span>
+    <span class="string">'Location'</span>, <span class="string">'northwest'</span>);
+
+set([hXLabel1, hYLabel1, hTitle1, hLegend1], <span class="keyword">...</span>
+    <span class="string">'FontName'</span>, <span class="string">'Courier 10 Pitch'</span>, <span class="keyword">...</span>
+    <span class="string">'FontSize'</span>, 14, <span class="keyword">...</span>
+    <span class="string">'FontWeight'</span>, <span class="string">'bold'</span>);
+
+set(gca, <span class="keyword">...</span>
+    <span class="string">'Box'</span>, <span class="string">'off'</span>, <span class="keyword">...</span>
+    <span class="string">'TickDir'</span>, <span class="string">'out'</span>, <span class="keyword">...</span>
+    <span class="string">'TickLength'</span>, [.02 .02], <span class="keyword">...</span>
+    <span class="string">'XMinorTick'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+    <span class="string">'YMinorTick'</span>, <span class="string">'on'</span>);
+
+tNodes2 = [4332.4 10759.0 30684.0 60188.0 90710.0];
+dNodes2 = [778.14 1427.0 2870.3 4499.9 5909.0];
+x2 = linspace(0, 6000, 1000);
+<span class="comment">% find the best fit function for the remaining 5 planets</span>
+y2 = orbital_fit(x2, tNodes2, dNodes2);
+
+<span class="comment">% formatting</span>
+figure(<span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+    <span class="string">'Position'</span>, [100 100 700 800]);
+plot(x2, y2, <span class="keyword">...</span>
+  <span class="string">'LineStyle'</span>, <span class="string">'-'</span>, <span class="keyword">...</span>
+  <span class="string">'LineWidth'</span>, 2, <span class="keyword">...</span>
+  <span class="string">'Color'</span>, <span class="string">'b'</span>);
+
+hold <span class="string">on</span>;
+
+plot(dNodes2, tNodes2, <span class="string">'o'</span>, <span class="keyword">...</span>
+  <span class="string">'LineWidth'</span>, 3, <span class="keyword">...</span>
+  <span class="string">'MarkerSize'</span>, 10, <span class="keyword">...</span>
+  <span class="string">'MarkerEdgeColor'</span>, <span class="string">'r'</span>, <span class="keyword">...</span>
+  <span class="string">'MarkerFaceColor'</span>, <span class="string">'y'</span>);
+
+hTitle2 = title(<span class="string">'The Least Squares Fit For Keplers Third Law of Motion'</span>);
+hXLabel2 = xlabel(<span class="string">'Distance (km x 10^6)'</span>);
+hYLabel2 = ylabel(<span class="string">'Sidereal Period (days)'</span>);
+hLegend2 = legend({<span class="string">'T = 0.1998x^{3/2}'</span>, <span class="string">'Last 5 Planets'</span>}, <span class="keyword">...</span>
+    <span class="string">'Location'</span>, <span class="string">'northwest'</span>);
+
+set([hXLabel2, hYLabel2, hTitle2, hLegend2], <span class="keyword">...</span>
+    <span class="string">'FontName'</span>, <span class="string">'Courier 10 Pitch'</span>, <span class="keyword">...</span>
+    <span class="string">'FontSize'</span>, 14, <span class="keyword">...</span>
+    <span class="string">'FontWeight'</span>, <span class="string">'bold'</span>);
+
+set(gca, <span class="keyword">...</span>
+    <span class="string">'Box'</span>, <span class="string">'off'</span>, <span class="keyword">...</span>
+    <span class="string">'TickDir'</span>, <span class="string">'out'</span>, <span class="keyword">...</span>
+    <span class="string">'TickLength'</span>, [.02 .02], <span class="keyword">...</span>
+    <span class="string">'XMinorTick'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+    <span class="string">'YMinorTick'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+    <span class="string">'YTickLabel'</span>, num2str(transpose(get(gca, <span class="string">'YTick'</span>))));
+</pre><img vspace="5" hspace="5" src="hw5_01.png" alt=""> <img vspace="5" hspace="5" src="hw5_02.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%
+% Title: hw5.m
+% Summary: driver m-script for Homework 3 for MATH 3315
+% Author: Zack Fout
+% Version: 1.1
+% Last Modified: 04/13/2015
+% Notes: finished problem 3
+%
+%% *MATH 3315 Homework 5 #3 By Zack Fout*
+tNodes1 = [87.99 224.70 365.26 686.98]; % orbital period values
+dNodes1 = [57.59 108.11 149.57 227.84]; % distance values
+x1 = linspace(0, 300, 500);
+% find the best fit function for the first 4 planets
+y1 = orbital_fit(x1, tNodes1, dNodes1);
+
+% formatting
+figure('Units', 'pixels', ...
+    'Position', [100 100 700 600]);
+plot(x1, y1, ... 
+  'LineStyle', '-', ...
+  'LineWidth', 2, ...
+  'Color', 'b');
+ylim([0, 800]);
+
+hold on;
+
+plot(dNodes1, tNodes1, 'o', ...
+  'LineWidth', 3, ...
+  'MarkerSize', 10, ...
+  'MarkerEdgeColor', 'r', ...
+  'MarkerFaceColor', 'y');
+
+hTitle1 = title('The Least Squares Fit For Keplers Third Law of Motion');
+hXLabel1 = xlabel('Distance (km x 10^6)');
+hYLabel1 = ylabel('Sidereal Period (days)');
+hLegend1 = legend({'T = 0.1998x^{3/2}', 'First 4 Planets'}, ...
+    'Location', 'northwest');
+
+set([hXLabel1, hYLabel1, hTitle1, hLegend1], ...
+    'FontName', 'Courier 10 Pitch', ...
+    'FontSize', 14, ...
+    'FontWeight', 'bold');
+
+set(gca, ...
+    'Box', 'off', ...
+    'TickDir', 'out', ...
+    'TickLength', [.02 .02], ...
+    'XMinorTick', 'on', ...
+    'YMinorTick', 'on');
+
+tNodes2 = [4332.4 10759.0 30684.0 60188.0 90710.0];
+dNodes2 = [778.14 1427.0 2870.3 4499.9 5909.0];
+x2 = linspace(0, 6000, 1000);
+% find the best fit function for the remaining 5 planets
+y2 = orbital_fit(x2, tNodes2, dNodes2);
+
+% formatting
+figure('Units', 'pixels', ...
+    'Position', [100 100 700 800]);
+plot(x2, y2, ... 
+  'LineStyle', '-', ...
+  'LineWidth', 2, ...
+  'Color', 'b');
+
+hold on;
+
+plot(dNodes2, tNodes2, 'o', ...
+  'LineWidth', 3, ...
+  'MarkerSize', 10, ...
+  'MarkerEdgeColor', 'r', ...
+  'MarkerFaceColor', 'y');
+
+hTitle2 = title('The Least Squares Fit For Keplers Third Law of Motion');
+hXLabel2 = xlabel('Distance (km x 10^6)');
+hYLabel2 = ylabel('Sidereal Period (days)');
+hLegend2 = legend({'T = 0.1998x^{3/2}', 'Last 5 Planets'}, ...
+    'Location', 'northwest');
+
+set([hXLabel2, hYLabel2, hTitle2, hLegend2], ...
+    'FontName', 'Courier 10 Pitch', ...
+    'FontSize', 14, ...
+    'FontWeight', 'bold');
+
+set(gca, ...
+    'Box', 'off', ...
+    'TickDir', 'out', ...
+    'TickLength', [.02 .02], ...
+    'XMinorTick', 'on', ...
+    'YMinorTick', 'on', ...
+    'YTickLabel', num2str(transpose(get(gca, 'YTick'))));
+
+##### SOURCE END #####
+--></body></html>

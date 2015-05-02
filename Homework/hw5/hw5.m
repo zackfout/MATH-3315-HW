@@ -6,7 +6,7 @@
 % Last Modified: 04/13/2015
 % Notes: finished problem 3
 %
-%% *MATH 3315 Homework 5 #3 By Zack Fout
+%% *MATH 3315 Homework 5 #3 By Zack Fout*
 tNodes1 = [87.99 224.70 365.26 686.98]; % orbital period values
 dNodes1 = [57.59 108.11 149.57 227.84]; % distance values
 x1 = linspace(0, 300, 500);
